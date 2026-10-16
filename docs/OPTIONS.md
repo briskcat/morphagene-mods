@@ -18,7 +18,8 @@ there.
 | Key | Values | Default | What it does |
 |---|---|---|---|
 | `tape` | 0, 1 | 1 | SHIFT + S.O.S.: **1** tape mode, **0** classic TLA feedback |
-| `octl` | 0, 1 | 1 | SHIFT + Varispeed: **1** exact octave lock, **0** off (SHIFT behaves as stock) |
+| `octl` | 0–4 | 1 | SHIFT + Varispeed lock: **1** octaves, **2** octaves + fifths, **3** semitones, **4** your scale from `scal`, **0** off (SHIFT behaves as stock) ([how it works](USING.md#shift--varispeed-scale-lock)) |
+| `scal` | list of 1–11 | 0 (none) | Your scale for `octl 4`: semitones above the root, separated by commas or spaces, e.g. `3,5,7,10` (minor pentatonic). The root and its octaves are always on |
 | `fxsl` | 0, 1, 2 | 1 | SHIFT + Morph: **1** sample-rate reduction, **2** tape warble, **0** off |
 | `mcap` | 0–9 | 3 | Morph limit while tape mode is dubbing: **1–9** = 0.1–0.9, **0** = no limit. Above 5, or 0, can glitch with many Genes + dubbing + SRR |
 | `sldm` | 0, 1 | 0 | Turing mode: **1** on, **0** off ([how to play it](USING.md#turing-mode-sldm-1)) |
@@ -34,7 +35,8 @@ Values out of range are ignored, and the default is used. SHIFT + Slide
 ```
 //Morphagene Study mods
 tape 1 //SHIFT+S.O.S.: 0 classic TLA feedback (input + feedback x Gene playback), 1 tape mode (Varispeed tape head in the Slide/Gene Size window)
-octl 1 //SHIFT+Varispeed: 0 normal, 1 exact octave lock
+octl 1 //SHIFT+Varispeed lock: 0 off, 1 octaves, 2 octaves + fifths, 3 semitones, 4 custom scale (scal)
+scal 0 //Custom scale for octl 4: semitones 1-11 above the root, e.g. 3,5,7,10 = minor pentatonic (root and octaves always on)
 fxsl 1 //SHIFT+Morph effect: 0 off (Morph stays stock), 1 SRR (sample-rate reduction), 2 warble (tape wow and flutter on the Gene playback)
 //SHIFT+Slide: Gene start jitter amount (left = off)
 cpul 0 //CPU log, for troubleshooting only: 0 off, 1 on (writes cpulog.txt every 10 s; turn it off again afterwards)

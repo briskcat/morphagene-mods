@@ -5,7 +5,8 @@ official firmware (version mg204). It's an unofficial community project, not
 affiliated with or supported by Make Noise.
 
 - **SHIFT + knob gestures:** tape-style overdubbing, sound-on-sound feedback,
-  sample-rate reduction or tape warble, octave-locked Varispeed, random Gene
+  sample-rate reduction or tape warble, Varispeed locked to octaves, fifths,
+  semitones or your own scale, random Gene
   start positions and a Turing-Machine-style "Turing mode".
 - **Your input gain is remembered** between power cycles.
 - **Updates from the SD card** in about 2 seconds, with no audio cable (after
@@ -50,7 +51,7 @@ the same way. The mods never touch the bootloader.
 |---|---|---|
 | Tape mode / TLA feedback | SHIFT + S.O.S. | tried on hardware |
 | Sample-rate reduction or tape warble | SHIFT + Morph | tried on hardware |
-| Exact octave lock | SHIFT + Varispeed | tried on hardware |
+| Varispeed lock: octaves, octaves + fifths, semitones or a custom scale | SHIFT + Varispeed | tried on hardware |
 | Random Gene start positions (jitter) | SHIFT + Slide | tried on hardware |
 | Turing mode | `sldm 1`, then SHIFT + Organize / Gene Size / Slide | tried on hardware |
 | Input gain remembered | automatic (REC held + SHIFT taps, as stock) | tried on hardware |

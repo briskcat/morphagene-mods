@@ -37,7 +37,7 @@ It hooks the stock startup right after the first successful card mount
 bootloader working. Recover with the official `mg204.wav` by audio.
 
 **Boot settings.** Every boot it also sets the `options.txt` setting defaults
-(SETTINGS magic, `tape 1`, `octl 1`, `fxsl 1`, `cpul 0`, `mcap 3`,
+(SETTINGS magic, `tape 1`, `octl 1`, `scal` empty, `fxsl 1`, `cpul 0`, `mcap 3`,
 `sldm 0`, `root 50`, `tlen 8`, `ingn 0`) before the stock parser runs, and clears the
 warble and Turing state.
 

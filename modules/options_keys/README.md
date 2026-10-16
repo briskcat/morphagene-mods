@@ -5,12 +5,14 @@ take effect.
 
 ## What it does
 
-Adds `tape`, `octl`, `fxsl`, `cpul`, `mcap`, `sldm`, `root` and
+Adds `tape`, `octl`, `scal`, `fxsl`, `cpul`, `mcap`, `sldm`, `root`,
 `tlen` and `ingn` to `options.txt` (see [docs/OPTIONS.md](../../docs/OPTIONS.md)).
 
 - **Parser hook** (0x08023326): checks our keys before the stock key dispatch.
-  On/off keys accept 0 or 1, `fxsl` 0–2 and `mcap` 0–9 (one digit); `root`
-  (0–100) and `tlen` (1–16) read up to four digits. Anything else is ignored.
+  On/off keys accept 0 or 1, `octl` 0–4, `fxsl` 0–2 and `mcap` 0–9 (one
+  digit); `root` (0–100) and `tlen` (1–16) read up to four digits. `scal`
+  reads a list of numbers separated by commas or spaces and keeps 1–11, up to
+  the end of the line or a comment. Anything else is ignored.
 - **Writer hook** (0x0802455e): just before the stock writer's final `f_close`,
   it appends:
   - the `//Morphagene Study mods` section with the current values and comments;
@@ -20,6 +22,10 @@ Adds `tape`, `octl`, `fxsl`, `cpul`, `mcap`, `sldm`, `root` and
 +6 `fxsl`, +7 unused, +8 `cpul`, +9 `mcap`, +10 `sldm`, +11 `root`, +12
 `tlen`, +13 `ingn`, +14 applied this boot, +15 pending gain + 1. sd_updater
 writes the defaults every boot.
+
+**Scale** (0x2002A604, u16): the `scal` mask, bit *d* = *d* semitones (bits
+1–11). The settings block is full, so it lives here. sd_updater clears it
+every boot.
 
 ## Input gain (`ingn`)
 

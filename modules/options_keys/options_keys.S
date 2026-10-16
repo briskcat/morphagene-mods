@@ -3,7 +3,10 @@
 @
 @ Keys (first four characters, single digit at position 5, like stock keys):
 @   tape 0|1   SHIFT+S.O.S.: 0 classic TLA feedback, 1 tape mode (default 1)
-@   octl 0|1   SHIFT+Varispeed octave lock: 0 off, 1 on (default 1)
+@   octl 0-4   SHIFT+Varispeed lock: 0 off, 1 octaves, 2 octaves + fifths,
+@              3 semitones, 4 custom scale (default 1)
+@   scal list  custom scale for octl 4: semitones 1-11 above the root,
+@              comma or space separated ("scal 3,5,7,10"; default none)
 @   fxsl 0-2   SHIFT+Morph effect: 0 off, 1 SRR, 2 warble (default 1)
 @   cpul 0|1   CPU log cpulog.txt, for troubleshooting: 0 off, 1 on (default 0; cpu_meter)
 @   mcap 0-9   Morph cap while tape-dubbing: 0 none, 1-9 = 0.1-0.9 (default 3)
@@ -20,6 +23,8 @@
 @ Settings block (SETTINGS): +0 magic "OPTS", +4 tape, +5 octl, +6 fxsl,
 @ +7 unused (was pfch), +8 cpul, +9 mcap, +10 sldm, +11 root, +12 tlen, +13 ingn (the
 @ saved gain), +14 applied at boot (0/1), +15 pending gain + 1 (0 = none).
+@ The block is full, so scal lives at SCALE: a u16 mask, bit d = d semitones
+@ (bits 1-11), reset to 0 every boot by sd_updater.
 @
 @ Main-loop hook (opt_main, 0x08023ee6): the request dispatcher's test of
 @ flag 0x80 (rewrite options.txt), reached only when no other card request is
@@ -48,6 +53,8 @@
     .equ KEY_ROOT,       0x746f6f72     @ "root"
     .equ KEY_TLEN,       0x6e656c74     @ "tlen"
     .equ KEY_INGN,       0x6e676e69     @ "ingn"
+    .equ KEY_SCAL,       0x6c616373     @ "scal"
+    .equ SCALE,          0x2002A604     @ scal mask (u16)
     .equ GAIN,           0x20001068     @ stock input-gain index 0-3
     .equ SET_GAIN,       0x080257dd     @ stock: codec line-in volume = 0x13 + 4 * gain
     .equ FLAGS,          0x20022074     @ main-loop request flags; 0x80 = rewrite options.txt
@@ -100,6 +107,9 @@ opt_parse:
     ldr     r1, =KEY_INGN
     cmp     r0, r1
     beq     17f
+    ldr     r1, =KEY_SCAL
+    cmp     r0, r1
+    beq     18f
     ldrb.w  ip, [fp, #1]                @ replaced instruction: stock keys
     b.w     PARSE_STOCK
 8:  adds    r2, r2, #9                  @ mcap -> +9, digits 0-9
@@ -109,8 +119,9 @@ opt_parse:
     b       3f
 1:  adds    r2, r2, #4                  @ tape -> +4
     b       3f
-2:  adds    r2, r2, #5                  @ octl -> +5
-    b       3f
+2:  adds    r2, r2, #5                  @ octl -> +5, digits 0-4
+    movs    r3, #4
+    b       9f
 5:  adds    r2, r2, #6                  @ fxsl -> +6, digits 0-2
     movs    r3, #2
     b       9f
@@ -152,6 +163,40 @@ opt_parse:
     beq     4b
 16: strb    r0, [r2]
     b       4b
+18: movs    r0, #0                      @ scal: a list of numbers 1-11 -> mask
+    mov     ip, #5
+19: ldrb    r1, [fp, ip]
+    cmp     r1, #','
+    beq     20f
+    cmp     r1, #' '
+    beq     20f
+    subs    r1, r1, #'0'
+    cmp     r1, #9
+    bhi     22f                         @ end of line, comment or junk
+    movs    r3, #0
+21: add     r3, r3, r3, lsl #2          @ r3 = 10 * r3 + digit
+    add     r3, r1, r3, lsl #1
+    add     ip, ip, #1
+    ldrb    r1, [fp, ip]
+    subs    r1, r1, #'0'
+    cmp     r1, #9
+    bhi     23f
+    cmp     r3, #100                    @ three digits: not a semitone
+    blo     21b
+23: subs    r3, r3, #1                  @ 1-11 only (0 is the root, always on)
+    cmp     r3, #10
+    bhi     19b
+    adds    r3, r3, #1
+    movs    r1, #1
+    lsls    r1, r1, r3
+    orrs    r0, r0, r1
+    b       19b
+20: add     ip, ip, #1
+    cmp     ip, #64
+    blo     19b
+22: ldr     r2, =SCALE
+    strh    r0, [r2]
+    b       4b
 
 @ Writer: r0 is free; the FIL is at sp + 1396 (as the stock code computes).
     .thumb_func
@@ -178,6 +223,41 @@ opt_write:
     ldr     r1, =fmt_octl
     ldr     r3, =F_PRINTF
     blx     r3
+    push    {r4-r6, lr}                 @ FIL now at sp + 1412
+    ldr     r4, =SCALE                  @ scal: the mask as a list, "0" if empty
+    ldrh    r4, [r4]
+    movw    r1, #0xffe
+    ands    r4, r4, r1
+    addw    r0, sp, #1412
+    ldr     r1, =fmt_scal
+    ldr     r3, =F_PRINTF
+    blx     r3
+    cbnz    r4, 31f
+    addw    r0, sp, #1412
+    ldr     r1, =fmt_num
+    movs    r2, #0
+    ldr     r3, =F_PRINTF
+    blx     r3
+    b       33f
+31: movs    r5, #1                      @ semitone
+    ldr     r6, =fmt_num                @ first entry without a comma
+32: lsr     r0, r4, r5
+    tst     r0, #1
+    beq     34f
+    addw    r0, sp, #1412
+    mov     r1, r6
+    mov     r2, r5
+    ldr     r3, =F_PRINTF
+    blx     r3
+    ldr     r6, =fmt_cnum
+34: adds    r5, r5, #1
+    cmp     r5, #12
+    blo     32b
+33: addw    r0, sp, #1412
+    ldr     r1, =fmt_scal_end
+    ldr     r3, =F_PRINTF
+    blx     r3
+    pop     {r4-r6, lr}
     ldr     r3, =SETTINGS
     ldr     r2, [r3]
     ldr     r1, =SETTINGS_MAGIC
@@ -335,7 +415,15 @@ opt_main:
     .align 2
 fmt_tape: .asciz "//\n//Morphagene Study mods\ntape %d //SHIFT+S.O.S.: 0 classic TLA feedback (input + feedback x Gene playback), 1 tape mode (Varispeed tape head in the Slide/Gene Size window)\n"
     .align 2
-fmt_octl: .asciz "octl %d //SHIFT+Varispeed: 0 normal, 1 exact octave lock\n"
+fmt_octl: .asciz "octl %d //SHIFT+Varispeed lock: 0 off, 1 octaves, 2 octaves + fifths, 3 semitones, 4 custom scale (scal)\n"
+    .align 2
+fmt_scal: .asciz "scal "
+    .align 2
+fmt_num:  .asciz "%d"
+    .align 2
+fmt_cnum: .asciz ",%d"
+    .align 2
+fmt_scal_end: .asciz " //Custom scale for octl 4: semitones 1-11 above the root, e.g. 3,5,7,10 = minor pentatonic (root and octaves always on)\n"
     .align 2
 fmt_fxsl: .asciz "fxsl %d //SHIFT+Morph effect: 0 off (Morph stays stock), 1 SRR (sample-rate reduction), 2 warble (tape wow and flutter on the Gene playback)\n//SHIFT+Slide: Gene start jitter amount (left = off)\n"
     .align 2

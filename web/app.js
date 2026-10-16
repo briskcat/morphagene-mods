@@ -177,7 +177,8 @@ const MOD_HEADER = '//Morphagene Study mods';
 // In the order and wording the firmware writes them (options_keys.S).
 const KEYS = {
   tape: '//SHIFT+S.O.S.: 0 classic TLA feedback (input + feedback x Gene playback), 1 tape mode (Varispeed tape head in the Slide/Gene Size window)',
-  octl: '//SHIFT+Varispeed: 0 normal, 1 exact octave lock',
+  octl: '//SHIFT+Varispeed lock: 0 off, 1 octaves, 2 octaves + fifths, 3 semitones, 4 custom scale (scal)',
+  scal: '//Custom scale for octl 4: semitones 1-11 above the root, e.g. 3,5,7,10 = minor pentatonic (root and octaves always on)',
   fxsl: '//SHIFT+Morph effect: 0 off (Morph stays stock), 1 SRR (sample-rate reduction), 2 warble (tape wow and flutter on the Gene playback)',
   cpul: '//CPU log, for troubleshooting only: 0 off, 1 on (writes cpulog.txt every 10 s; turn it off again afterwards)',
   mcap: '//Morph cap while tape-dubbing: 0 none, 1-9 = Morph limited to 0.1-0.9 (CPU safety; 3 = 0.3)',
@@ -187,10 +188,18 @@ const KEYS = {
   ingn: '//Input gain 0-3 (REC held + SHIFT taps); saved automatically a few seconds after a change',
 };
 const FIELDS = [...Object.keys(KEYS), 'gnsm'];
-const LINE = /^([a-z]{4}) (\d+)(.*)$/;
+const LINE = /^([a-z]{4}) (\d+(?:[, ]+\d+)*)(.*)$/;
+
+// scal: the semitones 1-11 the firmware keeps, as it writes them back ("0" when none).
+function scaleList(text) {
+  const semis = [...new Set((text.match(/\d+/g) || []).map(Number).filter((n) => n >= 1 && n <= 11))];
+  return semis.length ? semis.sort((a, b) => a - b).join(',') : '0';
+}
 
 function chosenOptions() {
-  return Object.fromEntries(FIELDS.map((k) => [k, $('opt-' + k).value]));
+  const values = Object.fromEntries(FIELDS.map((k) => [k, $('opt-' + k).value]));
+  values.scal = scaleList(values.scal);
+  return values;
 }
 
 function modLines(values) {
@@ -292,6 +301,7 @@ function init() {
   $('build-wav').addEventListener('click', () => build('wav'));
 
   for (const k of FIELDS) $('opt-' + k).addEventListener('change', renderOptions);
+  $('opt-scal').addEventListener('input', renderOptions);
   $('options-file').addEventListener('change', async (e) => {
     const file = e.target.files[0];
     loadedOptions = file ? await file.text() : null;
@@ -299,7 +309,9 @@ function init() {
       for (const line of loadedOptions.split(/\r?\n/).slice(1)) {
         const m = line.match(LINE);
         if (!m || !FIELDS.includes(m[1])) continue;
-        const el = $('opt-' + m[1]), value = String(Number(m[2]));
+        const el = $('opt-' + m[1]);
+        if (m[1] === 'scal') { el.value = scaleList(m[2]); continue; }
+        const value = String(Number(m[2]));
         if ([...el.options].some((o) => o.value === value)) el.value = value;
       }
     }

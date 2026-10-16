@@ -1,4 +1,4 @@
-@ Module shift_gestures: SHIFT knob gestures + Varispeed octave lock (mg204).
+@ Module shift_gestures: SHIFT knob gestures + Varispeed scale lock (mg204).
 @ Linked after the previous module's code (mgmod/module.py).
 @ Design: README.md beside this file.
 @
@@ -8,9 +8,9 @@
 @   +5  consumed u8  a knob moved more than T during this session
 @   +6  owner    u8  1 = S.O.S., 2 = Varispeed, 3 = Morph (SRR), 4 = Gene Size, 5 = Slide,
 @                    6 = Organize (Turing evolution, sldm 1)
-@   +7  lock     u8  octave lock engaged
+@   +7  lock     u8  scale lock engaged
 @   +8  ref_sos  u16 / +10 ref_vs u16   snapshots at session start
-@   +12 lock_k   u16 index into octave_m (-2,-1,-1/2,-1/4,stop,1/4,1/2,1,2)
+@   +12 lock_m   u16 locked lookup index m (4..392, a multiple of 4)
 @   +14 release_vs u16 Varispeed reading at SHIFT release (0xffff while held)
 @   +16..+127 reserved for sos_feedback.S and tape_sos.S (zeroed here)
 @   +208 ref_gs u16 / +210 ref_slide u16  snapshots for gene_shape.S (owners 4, 5)
@@ -41,6 +41,9 @@
     .equ T_PICKUP,     231         @ counts (about half an octave) that release a lock
     .equ SETTINGS,     0x2002A0F0  @ options.txt settings (options_keys / sd_updater)
     .equ SETTINGS_MAGIC, 0x5354504f
+    .equ SCALE,        0x2002A604  @ options.txt scal mask (options_keys)
+    .equ M_WIDE,       128         @ hysteresis in 1/16 lookup units: 2 semitones (octl 1-2)
+    .equ M_NARROW,     48          @ 3/4 semitone (octl 3-4, steps down to a semitone)
 
     @ Return addresses in the stock image.
     .equ P1_RETURN,    0x0802486e
@@ -286,14 +289,21 @@ p4_record_tap:
     b.w     TIM2_DONE
 
 @ P5 (hook at 0x0802787c, audio block, s18 = calibrated Varispeed x in 0..1).
-@ While a SHIFT+Varispeed edit is held, snap x to the nearest octave with
-@ hysteresis; after release keep it until the reading moves T_PICKUP counts.
-@ vsop 0/1 only; vsop >= 2 (forward-only table) is left stock.
+@ While a SHIFT+Varispeed edit is held, snap x to the nearest rate of the
+@ octl scale with hysteresis; after release keep it until the reading moves
+@ T_PICKUP counts. vsop 0/1 only; vsop >= 2 (forward-only table) is left stock.
+@
+@ Rates are lookup indices m on a grid g = m / 4 (1..98). The stock table is
+@ 2^((i - 144) / 48) with i = m - 200 forward and i = 196 - m reverse, so g
+@ is s semitones from 1x with s = g - 86 (g > 50) or s = 13 - g (g < 50).
+@ g = 50 is stop (always allowed); g = 49 would be T[0] (stop again), never.
+@ A grid point is allowed when bit (s mod 12) of the scale mask is set. Bit 0
+@ (octaves) is always set, so g = 1 (-2x) and g = 98 (2x) end every search.
 @ Preserves every register it uses: the audio routine keeps pointers live in
 @ r4-r12 across this point (ip is read again at 0x08027bae).
     .thumb_func
 p5_octave:
-    push    {r0-r6}
+    push    {r0-r7, lr}
     vpush   {s0-s1}
     ldr     r3, =MOD
     ldr     r1, [r3]
@@ -304,47 +314,98 @@ p5_octave:
     ldr     r1, [r1]
     cmp     r1, #2
     bhs     9f
-    ldr     r4, =octave_m
     ldrb    r1, [r3, #6]
     cmp     r1, #2
     bne     5f
     ldrb    r1, [r3, #5]
-    cbz     r1, 5f
+    cmp     r1, #0
+    beq     5f
     ldrb    r1, [r3, #4]
-    cbz     r1, 5f
+    cmp     r1, #0
+    beq     5f
     @ Held edit: u = trunc(x * 6400), the lookup index in 1/16 units.
     vldr    s0, k6400
     vmul.f32 s0, s18, s0
     vcvt.s32.f32 s0, s0
     vmov    r0, s0
-    ldrb    r1, [r3, #7]
-    cbz     r1, 2f
-    ldrh    r1, [r3, #12]               @ keep the current octave within
-    ldrh    r1, [r4, r1, lsl #1]        @ +/- 448 (half spacing + 4 index units)
-    lsls    r1, r1, #4
+    @ Scale mask (r6) and hysteresis (r7) from octl.
+    movs    r6, #1
+    movs    r7, #M_WIDE
+    ldr     r1, =SETTINGS
+    ldr     r2, [r1]
+    ldr     r4, =SETTINGS_MAGIC
+    cmp     r2, r4
+    bne     11f
+    ldrb    r2, [r1, #5]
+    cmp     r2, #2
+    it      eq
+    moveq   r6, #0x81                   @ octaves + fifths
+    cmp     r2, #3
+    blo     11f
+    mov     r7, #M_NARROW               @ (no flags: beq below)
+    movw    r6, #0xfff                  @ every semitone
+    beq     11f
+    ldr     r1, =SCALE                  @ octl 4: custom
+    ldrh    r6, [r1]
+    movw    r1, #0xffe
+    ands    r6, r6, r1
+    orr     r6, r6, #1
+11: subs    r1, r0, #8                  @ nearest grid point g0 = (u - 8 + 32) >> 6
+    adds    r1, r1, #32
+    asrs    r1, r1, #6
+    cmp     r1, #1
+    it      lt
+    movlt   r1, #1
+    cmp     r1, #98
+    it      gt
+    movgt   r1, #98
+    mov     r4, r1                      @ r4: nearest allowed at or below g0
+12: bl      allowed
+    cbnz    r2, 13f
+    subs    r4, r4, #1
+    b       12b
+13: mov     r5, r4                      @ keep; r4 walks up from g0
+    mov     r4, r1
+14: bl      allowed
+    cbnz    r2, 15f
+    adds    r4, r4, #1
+    b       14b
+15: lsls    r1, r5, #6                  @ distances |u - (64 g + 8)|
     adds    r1, r1, #8
     subs    r1, r0, r1
     it      mi
     rsbmi   r1, r1, #0
-    cmp     r1, #448
-    ble     3f
-2:  movs    r1, #0                      @ nearest of the nine octave indices
-    movs    r5, #0                      @ best k
-    mvn     r2, #0x80000000             @ best distance
-4:  ldrh    r6, [r4, r1, lsl #1]
-    lsl     r6, r6, #4
-    add     r6, r6, #8
-    subs    r6, r0, r6
+    lsls    r2, r4, #6
+    adds    r2, r2, #8
+    subs    r2, r0, r2
     it      mi
-    rsbmi   r6, r6, #0
-    cmp     r6, r2
+    rsbmi   r2, r2, #0
+    cmp     r2, r1                      @ ties go to the lower rate index
     itt     lt
-    movlt   r2, r6
-    movlt   r5, r1
-    adds    r1, r1, #1
-    cmp     r1, #9
-    blt     4b
-    strh    r5, [r3, #12]
+    movlt   r5, r4
+    movlt   r1, r2
+    lsls    r5, r5, #2                  @ best m = 4 g, distance r1
+    ldrb    r2, [r3, #7]                @ locked: keep the current rate unless
+    cbz     r2, 2f                      @ the best one is M nearer
+    ldrh    r2, [r3, #12]
+    subs    r4, r2, #4                  @ only a valid m (4..392, multiple of 4)
+    cmp     r4, #388
+    bhi     2f
+    tst     r2, #3
+    bne     2f
+    lsrs    r4, r2, #2                  @ and still in the scale (options re-read)
+    bl      allowed
+    cbz     r2, 2f
+    ldrh    r2, [r3, #12]
+    lsls    r2, r2, #4
+    adds    r2, r2, #8
+    subs    r2, r0, r2
+    it      mi
+    rsbmi   r2, r2, #0
+    add     r1, r1, r7
+    cmp     r2, r1
+    ble     3f
+2:  strh    r5, [r3, #12]
 3:  movs    r0, #1
     strb    r0, [r3, #7]
     movw    r0, #0xffff
@@ -368,8 +429,7 @@ p5_octave:
     movs    r0, #0                      @ moved away: back to continuous
     strb    r0, [r3, #7]
     b       9f
-7:  ldrh    r0, [r3, #12]               @ s18 = (m[k] + 0.5) / 400
-    ldrh    r0, [r4, r0, lsl #1]
+7:  ldrh    r0, [r3, #12]               @ s18 = (m + 0.5) / 400
     vmov    s0, r0
     vcvt.f32.s32 s0, s0
     vldr    s1, k0p5
@@ -377,13 +437,35 @@ p5_octave:
     vldr    s1, k1over400
     vmul.f32 s18, s0, s1
 9:  vpop    {s0-s1}
-    pop     {r0-r6}
+    pop     {r0-r7, lr}
     cmp     r0, #199                    @ replaced instructions
     ble.w   RATE_FULL
     b.w     RATE_NEXT
 
+@ r2 = 1 when grid point r4 is in scale mask r6. Uses r2 only.
+    .thumb_func
+allowed:
+    cmp     r4, #50
+    beq     2f
+    cmp     r4, #49
+    beq     1f
+    ite     gt
+    subgt   r2, r4, #50                 @ s + 36 = g - 50 (forward)
+    rsble   r2, r4, #49                 @ s + 36 = 49 - g (reverse)
+0:  cmp     r2, #12                     @ (s + 36) mod 12, s + 36 in 1..48
+    itt     hs
+    subhs   r2, r2, #12
+    bhs     0b
+    lsr     r2, r6, r2
+    and     r2, r2, #1
+    bx      lr
+1:  movs    r2, #0
+    bx      lr
+2:  movs    r2, #1
+    bx      lr
+
 @ P6 (hook at 0x08027bde, after the glide coefficient is chosen).
-@ While locked, glide with k = 1 so the rate lands exactly on the octave.
+@ While locked, glide with k = 1 so the rate lands exactly on the scale step.
     .thumb_func
 p6_glide:
     ldr     r0, =MOD
@@ -400,7 +482,4 @@ k6400:      .float 6400.0
 k0p5:       .float 0.5
 k1over400:  .float 0.0025
 k0p02:      .word 0x3ca3d70a
-@ Lookup indices of the exact rates -2,-1,-1/2,-1/4,stop,1/4,1/2,1,2
-@ in the stock bidirectional table (docs/FIRMWARE_MAP.md).
-octave_m:   .hword 4, 52, 100, 148, 200, 248, 296, 344, 392
     .ltorg

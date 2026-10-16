@@ -71,7 +71,7 @@ upd_hook:
     push    {r0-r12, lr}
     ldr     r0, =SETTINGS               @ settings defaults for this boot: tape 1,
     ldr     r1, =SETTINGS_MAGIC         @ octl 1, fxsl 1, (+7 unused), cpul 0, mcap 3, sldm 0,
-    str     r1, [r0]                    @ root 50, tlen 8, ingn 0 (options.txt may override)
+    str     r1, [r0]                    @ root 50, tlen 8, ingn 0, scal empty (options.txt may override)
     ldr     r1, =0x01010101
     str     r1, [r0, #4]
     movs    r1, #0                      @ cpul 0
@@ -87,6 +87,8 @@ upd_hook:
     movs    r1, #0                      @ ingn 0 (stock gain), not yet applied,
     strb    r1, [r0, #13]               @ nothing pending
     strh    r1, [r0, #14]
+    ldr     r0, =0x2002A604             @ scal: empty (options_keys)
+    strh    r1, [r0]
     ldr     r0, =0x2002A700             @ warble state (tape_mode, fxsl 2): start
     movs    r1, #0                      @ at rest after any reset
     str     r1, [r0]

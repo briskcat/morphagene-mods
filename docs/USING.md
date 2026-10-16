@@ -12,7 +12,7 @@ back near where it was (pickup). That way the sound doesn't jump when you let go
 |---|---|---|
 | SHIFT + S.O.S. | Tape mode or classic TLA feedback | `tape` |
 | SHIFT + Morph | Sample-rate reduction or tape warble | `fxsl` |
-| SHIFT + Varispeed | Exact octave lock | `octl` |
+| SHIFT + Varispeed | Lock to octaves, fifths, semitones or your own scale | `octl`, `scal` |
 | SHIFT + Slide | Random Gene start positions (jitter) | always on |
 | SHIFT + Organize / Gene Size / Slide | Turing mode controls | `sldm 1` |
 | REC held + SHIFT taps | Input gain (stock), now remembered | `ingn` |
@@ -49,11 +49,31 @@ sound-on-sound with TLA, without tape mode's moving head.
 The input itself isn't affected, so with feedback or TLA the effect builds
 up pass by pass. The amount resets at power-up.
 
-## SHIFT + Varispeed: octave lock
+## SHIFT + Varispeed: scale lock
 
-While SHIFT is held, Varispeed snaps to exact rates: −2, −1, −½, −¼, stop, ¼,
-½, 1 and 2. The lock stays after you let go of SHIFT. To release it, turn Varispeed about
-half an octave away. Turn it off with `octl 0`.
+While SHIFT is held, Varispeed snaps to the nearest step of a scale, so you
+can transpose the reel without a CV quantizer. Choose the scale with `octl`:
+
+| `octl` | Steps |
+|---|---|
+| 1 (default) | Octaves: −2, −1, −½, −¼, stop, ¼, ½, 1, 2 |
+| 2 | Octaves + fifths |
+| 3 | Every semitone |
+| 4 | Your own scale, listed in `scal` |
+| 0 | Off |
+
+For `octl 4`, list the semitones above the root that you want, e.g.
+`scal 3,5,7,10` (minor pentatonic) or `scal 2,4,5,7,9,11` (major). The root
+and its octaves are always included.
+
+Every scale is relative to normal speed (1×), works forward and in reverse,
+and goes from about ⅛× up to 2×. Stop is always a step. The steps are in tune
+(equal temperament).
+
+The lock stays after you let go of SHIFT. To release it, turn Varispeed about
+half an octave away. In semitone mode the steps are close together on the
+knob, so turn slowly; if you mostly want to get back to normal speed, the
+default `octl 1` is easiest.
 
 ## SHIFT + Slide: jitter
 
