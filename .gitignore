@@ -1,0 +1,8 @@
+# Built from your own firmware: never commit or share
+/build/
+*.wav
+*.bin
+!web/remixes.js
+__pycache__/
+*.py[cod]
+.DS_Store

@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Morphagene Mods</title>
+<meta name="description" content="Unofficial community firmware mods for the Make Noise Morphagene, built in your browser from your own copy of the official mg204 firmware.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%22-10%20-2%2044.0%2048.0%22%20%3E%3Crect%20x%3D%22-10%22%20y%3D%22-2%22%20width%3D%2244.0%22%20height%3D%2248.0%22%20rx%3D%229%22%20fill%3D%22%23161616%22/%3E%3Cg%3E%3Cline%20x1%3D%2218.24%22%20y1%3D%229.25%22%20x2%3D%225.76%22%20y2%3D%229.25%22%20stroke%3D%22%23D6F35C%22%20stroke-width%3D%221.4%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.55%22/%3E%3Cline%20x1%3D%2213.46%22%20y1%3D%2217.75%22%20x2%3D%2210.54%22%20y2%3D%2217.75%22%20stroke%3D%22%23D6F35C%22%20stroke-width%3D%221.4%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.55%22/%3E%3Cline%20x1%3D%224.64%22%20y1%3D%2226.25%22%20x2%3D%2219.36%22%20y2%3D%2226.25%22%20stroke%3D%22%23D6F35C%22%20stroke-width%3D%221.4%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.55%22/%3E%3Cline%20x1%3D%2216.17%22%20y1%3D%2234.75%22%20x2%3D%227.83%22%20y2%3D%2234.75%22%20stroke%3D%22%23D6F35C%22%20stroke-width%3D%221.4%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.55%22/%3E%3Cpath%20d%3D%22M12.00%2C5.00L12.98%2C5.57L13.94%2C6.13L14.87%2C6.70L15.75%2C7.27L16.57%2C7.83L17.30%2C8.40L17.95%2C8.97L18.50%2C9.53L18.93%2C10.10L19.24%2C10.67L19.44%2C11.23L19.50%2C11.80L19.44%2C12.37L19.24%2C12.93L18.93%2C13.50L18.50%2C14.07L17.95%2C14.63L17.30%2C15.20L16.57%2C15.77L15.75%2C16.33L14.87%2C16.90L13.94%2C17.47L12.98%2C18.03L12.00%2C18.60L11.02%2C19.17L10.06%2C19.73L9.13%2C20.30L8.25%2C20.87L7.43%2C21.43L6.70%2C22.00%22%20fill%3D%22none%22%20stroke%3D%22%23D6F35C%22%20stroke-width%3D%222.2%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.5%22/%3E%3Cpath%20d%3D%22M12.00%2C5.00L11.02%2C5.57L10.06%2C6.13L9.13%2C6.70L8.25%2C7.27L7.43%2C7.83L6.70%2C8.40L6.05%2C8.97L5.50%2C9.53L5.07%2C10.10L4.76%2C10.67L4.56%2C11.23L4.50%2C11.80L4.56%2C12.37L4.76%2C12.93L5.07%2C13.50L5.50%2C14.07L6.05%2C14.63L6.70%2C15.20L7.43%2C15.77L8.25%2C16.33L9.13%2C16.90L10.06%2C17.47L11.02%2C18.03L12.00%2C18.60L12.98%2C19.17L13.94%2C19.73L14.87%2C20.30L15.75%2C20.87L16.57%2C21.43L17.30%2C22.00%22%20fill%3D%22none%22%20stroke%3D%22%23161616%22%20stroke-width%3D%225.6%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M12.00%2C5.00L11.02%2C5.57L10.06%2C6.13L9.13%2C6.70L8.25%2C7.27L7.43%2C7.83L6.70%2C8.40L6.05%2C8.97L5.50%2C9.53L5.07%2C10.10L4.76%2C10.67L4.56%2C11.23L4.50%2C11.80L4.56%2C12.37L4.76%2C12.93L5.07%2C13.50L5.50%2C14.07L6.05%2C14.63L6.70%2C15.20L7.43%2C15.77L8.25%2C16.33L9.13%2C16.90L10.06%2C17.47L11.02%2C18.03L12.00%2C18.60L12.98%2C19.17L13.94%2C19.73L14.87%2C20.30L15.75%2C20.87L16.57%2C21.43L17.30%2C22.00%22%20fill%3D%22none%22%20stroke%3D%22%23D6F35C%22%20stroke-width%3D%222.2%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M17.30%2C22.00L17.95%2C22.57L18.50%2C23.13L18.93%2C23.70L19.24%2C24.27L19.44%2C24.83L19.50%2C25.40L19.44%2C25.97L19.24%2C26.53L18.93%2C27.10L18.50%2C27.67L17.95%2C28.23L17.30%2C28.80L16.57%2C29.37L15.75%2C29.93L14.87%2C30.50L13.94%2C31.07L12.98%2C31.63L12.00%2C32.20L11.02%2C32.77L10.06%2C33.33L9.13%2C33.90L8.25%2C34.47L7.43%2C35.03L6.70%2C35.60L6.05%2C36.17L5.50%2C36.73L5.07%2C37.30L4.76%2C37.87L4.56%2C38.43L4.50%2C39.00%22%20fill%3D%22none%22%20stroke%3D%22%23D6F35C%22%20stroke-width%3D%222.2%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.5%22/%3E%3Cpath%20d%3D%22M6.70%2C22.00L6.05%2C22.57L5.50%2C23.13L5.07%2C23.70L4.76%2C24.27L4.56%2C24.83L4.50%2C25.40L4.56%2C25.97L4.76%2C26.53L5.07%2C27.10L5.50%2C27.67L6.05%2C28.23L6.70%2C28.80L7.43%2C29.37L8.25%2C29.93L9.13%2C30.50L10.06%2C31.07L11.02%2C31.63L12.00%2C32.20L12.98%2C32.77L13.94%2C33.33L14.87%2C33.90L15.75%2C34.47L16.57%2C35.03L17.30%2C35.60L17.95%2C36.17L18.50%2C36.73L18.93%2C37.30L19.24%2C37.87L19.44%2C38.43L19.50%2C39.00%22%20fill%3D%22none%22%20stroke%3D%22%23161616%22%20stroke-width%3D%225.6%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M6.70%2C22.00L6.05%2C22.57L5.50%2C23.13L5.07%2C23.70L4.76%2C24.27L4.56%2C24.83L4.50%2C25.40L4.56%2C25.97L4.76%2C26.53L5.07%2C27.10L5.50%2C27.67L6.05%2C28.23L6.70%2C28.80L7.43%2C29.37L8.25%2C29.93L9.13%2C30.50L10.06%2C31.07L11.02%2C31.63L12.00%2C32.20L12.98%2C32.77L13.94%2C33.33L14.87%2C33.90L15.75%2C34.47L16.57%2C35.03L17.30%2C35.60L17.95%2C36.17L18.50%2C36.73L18.93%2C37.30L19.24%2C37.87L19.44%2C38.43L19.50%2C39.00%22%20fill%3D%22none%22%20stroke%3D%22%23D6F35C%22%20stroke-width%3D%222.2%22%20stroke-linecap%3D%22round%22/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #161616; --ink: #ECE8DE; --muted: #8F8A80; --accent: #D6F35C; --on-accent: #161616; --red: #FF7354; --track: #3a3833;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="night"]) { --bg: #F2F0E8; --ink: #1B1A18; --muted: #6F6B62; --accent: #3A62EA; --on-accent: #F2F0E8; --red: #D23A28; --track: #d6d2c6; }
+}
+:root[data-theme="cream"] { --bg: #F2F0E8; --ink: #1B1A18; --muted: #6F6B62; --accent: #3A62EA; --on-accent: #F2F0E8; --red: #D23A28; --track: #d6d2c6; }
+:root[data-theme="night"] { --bg: #161616; --ink: #ECE8DE; --muted: #8F8A80; --accent: #D6F35C; --on-accent: #161616; --red: #FF7354; --track: #3a3833; }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'DM Mono', ui-monospace, monospace; font-size: 15px; line-height: 1.6; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+a { color: inherit; }
+code { font-family: 'DM Mono', monospace; font-size: .92em; border-bottom: 1px solid var(--track); }
+.caps { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.rule { border: 0; border-top: 1px solid var(--ink); margin: 0; }
+
+/* top bar */
+.bar { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 14px 0 10px; }
+.bar .status { font-family: 'Instrument Serif', serif; font-style: italic; color: var(--muted); font-size: 19px; }
+.theme { display: flex; gap: 14px; }
+.theme button { all: unset; cursor: pointer; font-family: 'Instrument Serif', serif; font-size: 19px; color: var(--muted); }
+.theme button[aria-pressed="true"] { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+
+/* hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 380px); gap: 24px 48px; align-items: end; padding: 28px 0 28px; }
+h1 { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: clamp(60px, 10vw, 112px); line-height: .9; letter-spacing: -.02em; margin: 0; }
+.mark { display: inline-block; height: .6em; margin-left: .04em; position: relative; top: -.173em; }  /* stroke top = cap height (0.72em) */
+.mark svg { height: 100%; width: auto; overflow: visible; display: block; }
+.mark .s { fill: none; stroke: var(--accent); stroke-width: 2.2; stroke-linecap: round; }
+.mark .back { opacity: .5; }
+.mark .halo { fill: none; stroke: var(--bg); stroke-width: 5.6; stroke-linecap: round; }
+.mark .r { stroke: var(--accent); stroke-width: 1.4; stroke-linecap: round; opacity: .55; }
+.by { margin-top: 12px; }
+.lede { font-family: 'Instrument Serif', serif; font-size: clamp(22px, 2.6vw, 28px); line-height: 1.25; max-width: 30ch; margin: 18px 0 0; }
+
+/* caution */
+.caution { border: 1px solid var(--red); border-radius: 6px; padding: 16px 18px 18px; }
+.caution .caps { color: var(--red); }
+.caution h3 { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 26px; line-height: 1.1; margin: 4px 0 8px; }
+.caution p { margin: 0; font-size: 13px; color: var(--muted); }
+.caution p + p { margin-top: 8px; }
+
+/* sections */
+section { padding: 30px 0 34px; }
+.head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; }
+.head .num { color: var(--muted); font-size: 12px; }
+h2 { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 38px; line-height: 1; margin: 0; }
+.intro { font-family: 'Instrument Serif', serif; font-style: italic; color: var(--muted); font-size: 19px; margin: 6px 0 20px 34px; max-width: 46ch; }
+
+/* numbered steps */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+.steps li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 4px; }
+.steps .n { color: var(--muted); font-size: 12px; padding-top: 5px; }
+.steps p { margin: 0; font-family: 'Instrument Serif', serif; font-size: 22px; line-height: 1.3; }
+.steps p code { font-size: 15px; }
+.aside { margin-top: 4px; color: var(--muted); font-family: 'Instrument Serif', serif; font-style: italic; font-size: 17px; }
+.must { margin: 10px 0 24px 34px; padding: 4px 0 4px 18px; border-left: 2px solid var(--red); max-width: 62ch; }
+.must p { margin: 0; font-family: 'Instrument Serif', serif; font-size: 26px; line-height: 1.25; }
+.must .aside { font-size: 18px; margin-top: 8px; }
+.head .flag { align-self: center; margin-left: 2px; }
+.flag { display: inline-block; margin-left: 8px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--red); border: 1px solid var(--red); border-radius: 999px; padding: 0 8px; vertical-align: 4px; }
+
+/* controls */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 999px; padding: 11px 22px; cursor: pointer;
+  font: 500 12px/1.2 'DM Mono', monospace; letter-spacing: .1em; text-transform: uppercase; border: 1px solid var(--ink); color: var(--ink); background: transparent; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn:hover { filter: brightness(1.06); }
+.btn:focus-visible, .file input:focus-visible + .btn, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.file { display: inline-flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.file input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.file .name { font-family: 'Instrument Serif', serif; font-style: italic; color: var(--muted); font-size: 18px; }
+.status { min-height: 1.6em; margin-top: 10px; font-size: 13px; color: var(--muted); }
+.status[data-kind=ok] { color: var(--ink); }
+.status[data-kind=ok]::before { content: "● "; color: var(--accent); }
+.status[data-kind=error] { color: var(--red); }
+.field { display: grid; gap: 2px; }
+.field .caps { display: block; }
+select { appearance: none; -webkit-appearance: none; font-family: 'Instrument Serif', serif; font-size: 22px; color: var(--ink); background: transparent;
+  border: 0; border-bottom: 1px solid var(--ink); border-radius: 0; padding: 2px 26px 4px 0; cursor: pointer; width: 100%;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+  background-position: calc(100% - 12px) 55%, calc(100% - 7px) 55%; background-size: 5px 5px; background-repeat: no-repeat; }
+select option { background: var(--bg); color: var(--ink); font-family: 'DM Mono', monospace; font-size: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px 28px; }
+.panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px 48px; margin-left: 34px; }
+
+/* modules */
+.mods { list-style: none; padding: 0; margin: 14px 0 0; border-top: 1px solid var(--ink); }
+.mods li { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--track); }
+.mods .num { color: var(--muted); font-size: 11px; }
+.mods .t { font-family: 'Instrument Serif', serif; font-size: 20px; line-height: 1.2; }
+.mods .badge { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--track); border-radius: 999px; padding: 1px 9px; white-space: nowrap; }
+
+textarea { width: 100%; min-height: 170px; font: 12.5px/1.6 'DM Mono', monospace; padding: 12px 14px; border-radius: 6px;
+  border: 1px solid var(--ink); background: transparent; color: var(--ink); resize: vertical; }
+
+footer { padding: 26px 0 40px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; color: var(--muted); font-size: 13px; }
+footer a { color: var(--ink); }
+
+@media (max-width: 860px) {
+  .wrap { padding: 0 16px; }
+  .hero, .panel { grid-template-columns: minmax(0, 1fr); }
+  .panel, .intro, .must { margin-left: 0; }
+  .bar .status { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar">
+    <span class="caps">Unofficial · open source · mg204</span>
+    <span class="status">runs in your browser · nothing is uploaded</span>
+    <div class="theme" role="group" aria-label="Theme">
+      <button type="button" data-set="night">Night</button>
+      <button type="button" data-set="cream">Cream</button>
+    </div>
+  </div>
+  <hr class="rule">
+
+  <div class="hero">
+    <div>
+      <h1>Morphagene Mods<span class="mark"><svg viewBox="0 0 24 44" aria-hidden="true"><g><line x1="18.24" y1="9.25" x2="5.76" y2="9.25" class="r"/><line x1="13.46" y1="17.75" x2="10.54" y2="17.75" class="r"/><line x1="4.64" y1="26.25" x2="19.36" y2="26.25" class="r"/><line x1="16.17" y1="34.75" x2="7.83" y2="34.75" class="r"/><path d="M12.00,5.00L12.98,5.57L13.94,6.13L14.87,6.70L15.75,7.27L16.57,7.83L17.30,8.40L17.95,8.97L18.50,9.53L18.93,10.10L19.24,10.67L19.44,11.23L19.50,11.80L19.44,12.37L19.24,12.93L18.93,13.50L18.50,14.07L17.95,14.63L17.30,15.20L16.57,15.77L15.75,16.33L14.87,16.90L13.94,17.47L12.98,18.03L12.00,18.60L11.02,19.17L10.06,19.73L9.13,20.30L8.25,20.87L7.43,21.43L6.70,22.00" class="s back"/><path d="M12.00,5.00L11.02,5.57L10.06,6.13L9.13,6.70L8.25,7.27L7.43,7.83L6.70,8.40L6.05,8.97L5.50,9.53L5.07,10.10L4.76,10.67L4.56,11.23L4.50,11.80L4.56,12.37L4.76,12.93L5.07,13.50L5.50,14.07L6.05,14.63L6.70,15.20L7.43,15.77L8.25,16.33L9.13,16.90L10.06,17.47L11.02,18.03L12.00,18.60L12.98,19.17L13.94,19.73L14.87,20.30L15.75,20.87L16.57,21.43L17.30,22.00" class="halo"/><path d="M12.00,5.00L11.02,5.57L10.06,6.13L9.13,6.70L8.25,7.27L7.43,7.83L6.70,8.40L6.05,8.97L5.50,9.53L5.07,10.10L4.76,10.67L4.56,11.23L4.50,11.80L4.56,12.37L4.76,12.93L5.07,13.50L5.50,14.07L6.05,14.63L6.70,15.20L7.43,15.77L8.25,16.33L9.13,16.90L10.06,17.47L11.02,18.03L12.00,18.60L12.98,19.17L13.94,19.73L14.87,20.30L15.75,20.87L16.57,21.43L17.30,22.00" class="s"/><path d="M17.30,22.00L17.95,22.57L18.50,23.13L18.93,23.70L19.24,24.27L19.44,24.83L19.50,25.40L19.44,25.97L19.24,26.53L18.93,27.10L18.50,27.67L17.95,28.23L17.30,28.80L16.57,29.37L15.75,29.93L14.87,30.50L13.94,31.07L12.98,31.63L12.00,32.20L11.02,32.77L10.06,33.33L9.13,33.90L8.25,34.47L7.43,35.03L6.70,35.60L6.05,36.17L5.50,36.73L5.07,37.30L4.76,37.87L4.56,38.43L4.50,39.00" class="s back"/><path d="M6.70,22.00L6.05,22.57L5.50,23.13L5.07,23.70L4.76,24.27L4.56,24.83L4.50,25.40L4.56,25.97L4.76,26.53L5.07,27.10L5.50,27.67L6.05,28.23L6.70,28.80L7.43,29.37L8.25,29.93L9.13,30.50L10.06,31.07L11.02,31.63L12.00,32.20L12.98,32.77L13.94,33.33L14.87,33.90L15.75,34.47L16.57,35.03L17.30,35.60L17.95,36.17L18.50,36.73L18.93,37.30L19.24,37.87L19.44,38.43L19.50,39.00" class="halo"/><path d="M6.70,22.00L6.05,22.57L5.50,23.13L5.07,23.70L4.76,24.27L4.56,24.83L4.50,25.40L4.56,25.97L4.76,26.53L5.07,27.10L5.50,27.67L6.05,28.23L6.70,28.80L7.43,29.37L8.25,29.93L9.13,30.50L10.06,31.07L11.02,31.63L12.00,32.20L12.98,32.77L13.94,33.33L14.87,33.90L15.75,34.47L16.57,35.03L17.30,35.60L17.95,36.17L18.50,36.73L18.93,37.30L19.24,37.87L19.44,38.43L19.50,39.00" class="s"/></g></svg></span></h1>
+      <div class="by caps">community firmware · by Prismatic</div>
+      <p class="lede">New gestures, tape overdub, Turing mode, a remembered input gain and more, built into your own copy of the official firmware.</p>
+    </div>
+    <aside class="caution" aria-label="Caution">
+      <div class="caps">Read first</div>
+      <h3>Not affiliated with Make Noise. Proceed with care.</h3>
+      <p>This is an independent, unofficial project. Make Noise didn't make it, doesn't endorse it, and can't support it. Modified firmware can misbehave; you install it at your own risk.</p>
+      <p>You can always return to stock by playing the official <code>mg204.wav</code> into the module. Don't share the files you build: they contain Make Noise's firmware.</p>
+    </aside>
+  </div>
+  <hr class="rule">
+
+  <section id="first-time">
+    <div class="head"><span class="num">01</span><h2>The first time</h2><span class="flag">required</span></div>
+    <div class="must">
+      <p>The first time, your mod build must be installed with <strong>Make Noise's official audio update procedure</strong>, exactly like an official firmware update.</p>
+      <p class="aside">The SD-card updater is itself one of the mods, so it isn't on your module until this first audio install. After that, updates come from the card.</p>
+    </div>
+    <ol class="steps">
+      <li><span class="n">1</span><div><p>Build below and download the <strong>update WAV</strong>.</p></div></li>
+      <li><span class="n">2</span><div><p>Remove the SD card. Connect your computer or phone to <strong>Left Signal IN</strong>, at about 80% volume.</p></div></li>
+      <li><span class="n">3</span><div><p>Power on while holding <strong>REC</strong>. Only the SPLICE window lights, in green. Release REC.</p></div></li>
+      <li><span class="n">4</span><div><p>Play the update WAV from start to end. The windows flash while it loads, then all lights flash when it's done.</p>
+        <div class="aside">Don't touch anything while it plays. If it fails, power off and start again from step 3.</div></div></li>
+      <li><span class="n">5</span><div><p>Finish as Make Noise's instructions say, including the Varispeed calibration: power on holding <strong>SPLICE</strong>, turn Varispeed fully both ways, press SPLICE, then power-cycle.</p></div></li>
+      <li><span class="n">6</span><div><p>From then on, put <code>mgmod.bin</code> at the root of the card and power on. When the update has worked, the file is renamed <code>mgmod.ok</code>.</p></div></li>
+    </ol>
+  </section>
+  <hr class="rule">
+
+  <section id="build">
+    <div class="head"><span class="num">02</span><h2>Build</h2></div>
+    <p class="intro">Start from the unmodified <code>mg204.wav</code> from Make Noise's Morphagene firmware page. It's checked, then modified here in the page.</p>
+    <div class="panel">
+      <div>
+        <span class="caps">Official firmware</span>
+        <div class="file" style="margin-top:8px">
+          <input type="file" id="firmware" accept=".wav,.bin">
+          <label for="firmware" class="btn">Choose mg204.wav</label>
+          <span class="name" id="firmware-name">no file chosen</span>
+        </div>
+        <div class="status" id="firmware-status"></div>
+        <div class="field" style="margin-top:18px">
+          <label class="caps" for="remix">Remix</label>
+          <select id="remix"></select>
+        </div>
+        <p class="aside" id="remix-description"></p>
+        <div class="row" id="build-buttons" hidden style="margin-top:16px">
+          <button class="btn primary" id="build-wav">Update WAV · first time</button>
+          <button class="btn" id="build-card">mgmod.bin · SD card</button>
+        </div>
+        <div class="status" id="build-status"></div>
+      </div>
+      <div>
+        <span class="caps">Modules in this remix</span>
+        <ul class="mods" id="remix-modules"></ul>
+      </div>
+    </div>
+  </section>
+  <hr class="rule">
+
+  <section id="options">
+    <div class="head"><span class="num">03</span><h2>options.txt</h2></div>
+    <p class="intro">Every mod is switched here. Load the options.txt from your card to edit it in place, keeping your stock settings.</p>
+    <div class="panel">
+      <div>
+        <div class="file">
+          <input type="file" id="options-file" accept=".txt">
+          <label for="options-file" class="btn">Load options.txt</label>
+          <span class="name" id="options-name">optional</span>
+        </div>
+        <div class="grid" style="margin-top:22px">
+          <div class="field"><label class="caps" for="opt-tape">tape · shift + s.o.s.</label>
+            <select id="opt-tape"><option value="1">tape mode</option><option value="0">classic TLA feedback</option></select></div>
+          <div class="field"><label class="caps" for="opt-octl">octl · shift + varispeed</label>
+            <select id="opt-octl"><option value="1">octave lock</option><option value="0">off</option></select></div>
+          <div class="field"><label class="caps" for="opt-fxsl">fxsl · shift + morph</label>
+            <select id="opt-fxsl"><option value="1">SRR</option><option value="2">warble</option><option value="0">off</option></select></div>
+          <div class="field"><label class="caps" for="opt-gnsm">gnsm · gene smooth (stock)</label>
+            <select id="opt-gnsm"><option value="0">classic</option><option value="1">smooth</option></select></div>
+          <div class="field"><label class="caps" for="opt-mcap">mcap · morph cap while dubbing</label>
+            <select id="opt-mcap"><option value="0">no cap</option><option value="1">0.1</option><option value="2">0.2</option><option value="3" selected>0.3</option><option value="4">0.4</option><option value="5">0.5</option><option value="6">0.6</option><option value="7">0.7</option><option value="8">0.8</option><option value="9">0.9</option></select></div>
+          <div class="field"><label class="caps" for="opt-sldm">sldm · turing mode</label>
+            <select id="opt-sldm"><option value="0">off</option><option value="1">on · shift + organize</option></select></div>
+          <div class="field"><label class="caps" for="opt-tlen">tlen · turing loop length</label>
+            <select id="opt-tlen"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8" selected>8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option></select></div>
+          <div class="field"><label class="caps" for="opt-root">root · turing root chance</label>
+            <select id="opt-root"><option value="0">0%</option><option value="10">10%</option><option value="20">20%</option><option value="30">30%</option><option value="40">40%</option><option value="50" selected>50%</option><option value="60">60%</option><option value="70">70%</option><option value="80">80%</option><option value="90">90%</option><option value="100">100%</option></select></div>
+          <div class="field"><label class="caps" for="opt-ingn">ingn · input gain (rec + shift)</label>
+            <select id="opt-ingn"><option value="0" selected>0 (stock)</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></div>
+          <div class="field"><label class="caps" for="opt-pfch">pfch · flash prefetch</label>
+            <select id="opt-pfch"><option value="1">on</option><option value="0">off (stock)</option></select></div>
+          <div class="field"><label class="caps" for="opt-cpul">cpul · cpu log</label>
+            <select id="opt-cpul"><option value="0">off</option><option value="1">on · cpulog.txt</option></select></div>
+        </div>
+        <p class="aside" style="margin-top:18px">SHIFT + Slide (Gene start jitter) has no setting: it's off until you turn it up. Turing root 100% means no pitch shifting.</p>
+      </div>
+      <div>
+        <p class="aside" id="options-note" style="margin:0 0 10px"></p>
+        <textarea id="options-text" spellcheck="false" aria-label="options.txt"></textarea>
+        <div class="row" id="options-save-row" hidden style="margin-top:10px"><button class="btn" id="options-save">Download options.txt</button></div>
+      </div>
+    </div>
+  </section>
+  <hr class="rule">
+
+  <section id="stock">
+    <div class="head"><span class="num">04</span><h2>Back to stock</h2></div>
+    <ol class="steps">
+      <li><span class="n">→</span><div><p>Run the same audio procedure as the first time, with the <strong>official</strong> <code>mg204.wav</code>. The bootloader sits below the firmware and no mod or SD update ever writes it, so this always works, even if a build won't start.</p></div></li>
+    </ol>
+  </section>
+  <hr class="rule">
+
+  <footer>
+    <span>MIT licensed. <a href="https://github.com/briskcat/morphagene-mods">Source, module docs and the command-line builder on GitHub</a>.</span>
+    <span>An independent project, not made or endorsed by Make Noise. Morphagene is a trademark of Make Noise.</span>
+  </footer>
+</div>
+<script>
+(function () {
+  var root = document.documentElement;
+  function stored() { try { return localStorage.getItem('mgmod-theme'); } catch (e) { return null; } }
+  function apply(theme) {
+    var dark = theme ? theme === 'night' : !window.matchMedia('(prefers-color-scheme: light)').matches;
+    if (theme) root.setAttribute('data-theme', theme); else root.removeAttribute('data-theme');
+    document.querySelectorAll('.theme button').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.set === (dark ? 'night' : 'cream')));
+    });
+  }
+  apply(stored());
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function () { apply(stored()); });
+  document.querySelectorAll('.theme button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      try { localStorage.setItem('mgmod-theme', b.dataset.set); } catch (e) {}
+      apply(b.dataset.set);
+    });
+  });
+  document.getElementById('firmware').addEventListener('change', function (e) {
+    var f = e.target.files[0]; document.getElementById('firmware-name').textContent = f ? f.name : 'no file chosen';
+  });
+  document.getElementById('options-file').addEventListener('change', function (e) {
+    var f = e.target.files[0]; document.getElementById('options-name').textContent = f ? f.name : 'optional';
+  });
+})();
+</script>
+<script src="remixes.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
