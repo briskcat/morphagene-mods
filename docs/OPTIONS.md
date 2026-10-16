@@ -6,7 +6,7 @@ installed, a **Morphagene Study mods** section is added at the end of the file
 the first time you power on. You don't have to create it.
 
 **To change a setting:** edit the number after the key, save, put the card
-back and power on. The [web builder](../web/index.html) can also load your
+back and power on. The [web builder](https://briskcat.github.io/morphagene-mods/) can also load your
 `options.txt`, let you pick values from menus, and give the file back with
 your stock settings kept.
 

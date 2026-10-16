@@ -15,9 +15,11 @@ affiliated with or supported by Make Noise.
 
 ## No Make Noise firmware here
 
-This repository has no Make Noise firmware or code in it. You download the
-official `mg204.wav` from Make Noise yourself. The builder checks it is the
-genuine, unmodified file and adds the mods to it, on your own computer.
+No Make Noise firmware is included or distributed here: no firmware files,
+no images, no update WAVs. You download the official `mg204.wav` from Make
+Noise yourself. The builder checks it's the genuine, unmodified file and adds
+the mods to it, on your own computer. The mods are new code written for this
+project. They patch your copy in place.
 
 **Don't share the files you build**, because they contain Make Noise's firmware.
 Share a link to this project instead.
@@ -26,8 +28,8 @@ Share a link to this project instead.
 
 1. **Get the official firmware.** Download `mg204.wav` from the Make Noise
    Morphagene firmware page.
-2. **Build.** Open the [web builder](web/index.html) (or the project's GitHub
-   Pages site), choose your `mg204.wav`, and download the **update WAV**.
+2. **Build.** Open the **[web builder](https://briskcat.github.io/morphagene-mods/)**, choose your `mg204.wav`,
+   and download the **update WAV**.
    Everything runs in your browser; nothing is uploaded.
 3. **Install it like an official update:** power on while holding REC, then
    play the WAV into Left Signal IN. Step-by-step instructions:

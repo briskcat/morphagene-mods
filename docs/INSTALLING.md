@@ -10,7 +10,7 @@ You need:
 
 Pick one:
 
-- **Web builder (easiest):** open [the web builder](../web/index.html), choose
+- **Web builder (easiest):** open [the web builder](https://briskcat.github.io/morphagene-mods/), choose
   your `mg204.wav`, then download the **update WAV** for the first install and
   `mgmod.bin` for later updates.
 - **Command line:**
