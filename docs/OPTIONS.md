@@ -25,8 +25,6 @@ there.
 | `tlen` | 1–16 | 8 | Turing mode loop length, in steps |
 | `root` | 0–100 | 50 | Turing mode: chance in % that a step plays the root pitch instead of a chord ratio. `root 100` = no pitch changes |
 | `ingn` | 0–3 | 0 | Input gain (REC held + SHIFT taps). Saved automatically about 3 s after you change it on the module; 0 = stock starting level |
-| `pfch` | 0, 1 | 1 | Flash prefetch: **1** on (faster; recommended), **0** off (stock) |
-| `cpul` | 0, 1 | 0 | CPU log: **1** writes `cpulog.txt` to the card (for troubleshooting) |
 
 Values out of range are ignored, and the default is used. SHIFT + Slide
 (jitter) has no setting: it's off until you turn it up.
@@ -39,14 +37,28 @@ tape 1 //SHIFT+S.O.S.: 0 classic TLA feedback (input + feedback x Gene playback)
 octl 1 //SHIFT+Varispeed: 0 normal, 1 exact octave lock
 fxsl 1 //SHIFT+Morph effect: 0 off (Morph stays stock), 1 SRR (sample-rate reduction), 2 warble (tape wow and flutter on the Gene playback)
 //SHIFT+Slide: Gene start jitter amount (left = off)
-pfch 1 //Flash prefetch: 0 off (stock), 1 on (faster code from flash)
-cpul 0 //CPU log: 0 off, 1 on (cpulog.txt, one line per second, written every 10 s)
+cpul 0 //CPU log, for troubleshooting only: 0 off, 1 on (writes cpulog.txt every 10 s; turn it off again afterwards)
 mcap 3 //Morph cap while tape-dubbing: 0 none, 1-9 = Morph limited to 0.1-0.9 (CPU safety; 3 = 0.3)
 sldm 0 //Turing mode: 0 off, 1 on: ...
 root 50 //Turing: chance in percent that a step plays the root rather than a chord ratio (mcr1-mcr3)
 tlen 8 //Turing loop length in steps, 1-16
 ingn 0 //Input gain 0-3 (REC held + SHIFT taps); saved automatically a few seconds after a change
 ```
+
+## Troubleshooting: the CPU log (`cpul`)
+
+| Key | Values | Default | What it does |
+|---|---|---|---|
+| `cpul` | 0, 1 | 0 | **1** writes CPU statistics to `cpulog.txt` on the card, one line per second |
+
+**Only turn this on when you're chasing glitches.** It writes to the card
+every 10 seconds, so leave it off for normal use. To use it: set `cpul 1`,
+play the patch that glitches for a minute, power off, and send `cpulog.txt`
+with your bug report. Then set `cpul 0` again.
+
+Flash prefetch, which speeds up the firmware and gives the CPU more
+headroom, is always on and has no setting. An older `pfch` line in your file
+is ignored.
 
 ## About the input gain save
 

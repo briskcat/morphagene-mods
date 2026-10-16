@@ -86,7 +86,7 @@ instructions per block (Gene Size 3000, Morph 4000):
 | Mod, SRR on | 8,593 |
 
 Tape dubbing reads every sample it writes. If high Morph glitches are a
-problem, use `fxsl 0` (no SRR) or `fxsl 2` (warble is cheaper), keep `pfch 1`
+problem, use `fxsl 0` (no SRR) or `fxsl 2` (warble is cheaper), keep flash prefetch on (it always is)
 (cpu_meter), or lower `mcap`.
 
 ## Verification (emulator)

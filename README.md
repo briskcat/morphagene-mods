@@ -53,7 +53,8 @@ the same way. The mods never touch the bootloader.
 | Turing mode | `sldm 1`, then SHIFT + Organize / Gene Size / Slide | tried on hardware |
 | Input gain remembered | automatic (REC held + SHIFT taps, as stock) | emulator only, not yet tried on hardware |
 | SD-card updates | `mgmod.bin` on the card | tried on hardware |
-| Faster flash access, CPU log | `pfch`, `cpul` | tried on hardware |
+| Faster flash access (more CPU headroom) | always on | tried on hardware |
+| CPU log for troubleshooting | `cpul 1` | tried on hardware |
 | Overdub stays inside the selected splice | automatic (a fix) | built into every image; not tested on its own |
 
 Every feature was also checked instruction by instruction in an emulator
@@ -63,8 +64,7 @@ against the stock firmware.
 
 - **CPU at high Morph.** The stock firmware is already at its CPU limit at high
   Morph with short Genes, and stock can glitch there too. The mods add a little.
-  Keep flash prefetch on (`pfch 1`, the default), which more than makes up
-  for it. If SRR glitches, try warble (`fxsl 2`), which is cheaper.
+  Flash prefetch, which is always on, more than makes up for it. If SRR glitches, try warble (`fxsl 2`), which is cheaper.
 - **CV on a gesture knob.** CV moving a knob that has a SHIFT gesture can look
   like a turn while SHIFT is held, so a plain SHIFT tap may not move to the next
   splice. This is most likely with Slide.

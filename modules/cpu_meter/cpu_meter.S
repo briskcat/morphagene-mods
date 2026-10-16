@@ -1,13 +1,13 @@
-@ Module cpu_meter: CPU log on the SD card + flash prefetch (mg204).
+@ Module cpu_meter: flash prefetch (always on) + CPU log on the SD card (mg204).
 @ Independent of the other patches; reads options_keys settings when present.
 @
-@ options.txt (options_keys): "pfch 1" turns the flash prefetch buffer on
-@ (FLASH_ACR bit 8; stock leaves it off), "cpul 1" writes cpulog.txt.
-@ Defaults: pfch 1, cpul 0. The boot code also writes FLASH_ACR 0x705 instead of 0x605
-@ (module.py), so prefetch is on before the settings are read.
+@ Flash prefetch is always on: the stock clock setup writes FLASH_ACR 0x605
+@ once at boot; module.py patches it to 0x705 (bit 8, prefetch buffer).
+@ options.txt (options_keys): "cpul 1" writes cpulog.txt (default 0; for
+@ troubleshooting only).
 @
 @ Audio (A1, end of every audio block, where the stock code stores the DWT
-@ cycle count at 0x20021c90): applies pfch, sets DEMCR.TRCENA once so CYCCNT
+@ cycle count at 0x20021c90): sets DEMCR.TRCENA once so CYCCNT
 @ actually counts, and accumulates one-second windows (6,000 blocks): peak and
 @ mean cycles per block, blocks over 80% and over 100% of the 30,006-cycle
 @ block period, and the context at the peak block (active Genes, Morph,
@@ -42,7 +42,7 @@
     .equ RING,         0x20029100
     .equ RING_N,       64
     .equ FIL,          0x20029A00       @ FatFs FIL (~560 B)
-    .equ SETTINGS,     0x2002A0F0       @ options_keys: +7 pfch, +8 cpul
+    .equ SETTINGS,     0x2002A0F0       @ options_keys: +8 cpul
     .equ SETTINGS_MAGIC, 0x5354504f
     .equ MOD,          0x2002A000
     .equ MOD_MAGIC,    0x53484654
@@ -76,22 +76,13 @@
     .thumb_func
 cpu_block:
     str     r3, [r0]                    @ replaced: last = CYCCNT
-    movs    r2, #1                      @ defaults without settings: pfch 1, cpul 0
-    movs    r4, #0
+    movs    r4, #0                      @ cpul (default 0 without settings)
     ldr     r1, =SETTINGS
     ldr     r5, [r1]
     ldr     r8, =SETTINGS_MAGIC
     cmp     r5, r8
-    itt     eq
-    ldrbeq  r2, [r1, #7]                @ pfch
-    ldrbeq  r4, [r1, #8]                @ cpul
-    ldr     r1, =FLASH_ACR              @ prefetch = pfch
-    ldr     r5, [r1]
-    mov     r8, r5
-    bfi     r8, r2, #8, #1
-    cmp     r8, r5
-    it      ne
-    strne   r8, [r1]
+    it      eq
+    ldrbeq  r4, [r1, #8]
     cmp     r4, #0
     beq     9f
     ldr     r1, =DEMCR                  @ start CYCCNT once (no debugger needed)
@@ -247,15 +238,16 @@ cpu_main:
     ldr     r0, [r0]
     cmp     r0, #1
     bne     90f
-    ldr     r1, =SETTINGS               @ cpul (default 0) and pfch for the header
+    ldr     r1, =SETTINGS               @ cpul (default 0)
     ldr     r0, [r1]
     ldr     r2, =SETTINGS_MAGIC
     movs    r8, #0
-    movs    r9, #1
     cmp     r0, r2
-    itt     eq
+    it      eq
     ldrbeq  r8, [r1, #8]
-    ldrbeq  r9, [r1, #7]
+    ldr     r9, =FLASH_ACR              @ the header reports the real prefetch bit
+    ldr     r9, [r9]
+    ubfx    r9, r9, #8, #1
     cmp     r8, #0
     beq     90f
     ldr     r4, =CPU

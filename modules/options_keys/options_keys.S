@@ -5,8 +5,7 @@
 @   tape 0|1   SHIFT+S.O.S.: 0 classic TLA feedback, 1 tape mode (default 1)
 @   octl 0|1   SHIFT+Varispeed octave lock: 0 off, 1 on (default 1)
 @   fxsl 0-2   SHIFT+Morph effect: 0 off, 1 SRR, 2 warble (default 1)
-@   pfch 0|1   flash prefetch: 0 off (stock), 1 on (default 1; cpu_meter)
-@   cpul 0|1   CPU log cpulog.txt: 0 off, 1 on (default 0; cpu_meter)
+@   cpul 0|1   CPU log cpulog.txt, for troubleshooting: 0 off, 1 on (default 0; cpu_meter)
 @   mcap 0-9   Morph cap while tape-dubbing: 0 none, 1-9 = 0.1-0.9 (default 3)
 @   sldm 0|1   Turing mode: 0 off, 1 on (default 0; modules/gene_shape)
 @   root 0-100 Turing: chance (percent) that a step plays the root, not a chord
@@ -19,7 +18,7 @@
 @ options.txt (stock keys + comments) after parsing; we append our keys before
 @ its final f_close, so they persist and are documented in the file.
 @ Settings block (SETTINGS): +0 magic "OPTS", +4 tape, +5 octl, +6 fxsl,
-@ +7 pfch, +8 cpul, +9 mcap, +10 sldm, +11 root, +12 tlen, +13 ingn (the
+@ +7 unused (was pfch), +8 cpul, +9 mcap, +10 sldm, +11 root, +12 tlen, +13 ingn (the
 @ saved gain), +14 applied at boot (0/1), +15 pending gain + 1 (0 = none).
 @
 @ Main-loop hook (opt_main, 0x08023ee6): the request dispatcher's test of
@@ -43,7 +42,6 @@
     .equ KEY_TAPE,       0x65706174     @ "tape" as a little-endian word
     .equ KEY_OCTL,       0x6c74636f     @ "octl"
     .equ KEY_FXSL,       0x6c737866     @ "fxsl"
-    .equ KEY_PFCH,       0x68636670     @ "pfch"
     .equ KEY_CPUL,       0x6c757063     @ "cpul"
     .equ KEY_MCAP,       0x7061636d     @ "mcap"
     .equ KEY_SLDM,       0x6d646c73     @ "sldm"
@@ -84,9 +82,6 @@ opt_parse:
     ldr     r1, =KEY_FXSL
     cmp     r0, r1
     beq     5f
-    ldr     r1, =KEY_PFCH
-    cmp     r0, r1
-    beq     6f
     ldr     r1, =KEY_CPUL
     cmp     r0, r1
     beq     7f
@@ -119,8 +114,6 @@ opt_parse:
 5:  adds    r2, r2, #6                  @ fxsl -> +6, digits 0-2
     movs    r3, #2
     b       9f
-6:  adds    r2, r2, #7                  @ pfch -> +7
-    b       3f
 7:  adds    r2, r2, #8                  @ cpul -> +8
     b       3f
 17: adds    r2, r2, #13                 @ ingn -> +13, digits 0-3
@@ -194,17 +187,6 @@ opt_write:
     movne   r2, #1
     addw    r0, sp, #1396
     ldr     r1, =fmt_fxsl
-    ldr     r3, =F_PRINTF
-    blx     r3
-    ldr     r3, =SETTINGS
-    ldr     r2, [r3]
-    ldr     r1, =SETTINGS_MAGIC
-    cmp     r2, r1
-    ite     eq
-    ldrbeq  r2, [r3, #7]
-    movne   r2, #1
-    addw    r0, sp, #1396
-    ldr     r1, =fmt_pfch
     ldr     r3, =F_PRINTF
     blx     r3
     ldr     r3, =SETTINGS
@@ -357,9 +339,7 @@ fmt_octl: .asciz "octl %d //SHIFT+Varispeed: 0 normal, 1 exact octave lock\n"
     .align 2
 fmt_fxsl: .asciz "fxsl %d //SHIFT+Morph effect: 0 off (Morph stays stock), 1 SRR (sample-rate reduction), 2 warble (tape wow and flutter on the Gene playback)\n//SHIFT+Slide: Gene start jitter amount (left = off)\n"
     .align 2
-fmt_pfch: .asciz "pfch %d //Flash prefetch: 0 off (stock), 1 on (faster code from flash)\n"
-    .align 2
-fmt_cpul: .asciz "cpul %d //CPU log: 0 off, 1 on (cpulog.txt, one line per second, written every 10 s)\n"
+fmt_cpul: .asciz "cpul %d //CPU log, for troubleshooting only: 0 off, 1 on (writes cpulog.txt every 10 s; turn it off again afterwards)\n"
     .align 2
 fmt_mcap: .asciz "mcap %d //Morph cap while tape-dubbing: 0 none, 1-9 = Morph limited to 0.1-0.9 (CPU safety; 3 = 0.3)\n"
     .align 2

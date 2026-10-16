@@ -3,18 +3,19 @@
 **Status:** on hardware. Prefetch and the log were run on the module
 (2026-10-07); logs are kept in the project's separate (private) research repository.
 
-## Flash prefetch: `pfch` (default 1)
+## Flash prefetch: always on
 
 The firmware runs from flash with 5 wait states at 180 MHz. Stock turns on the
 flash caches but leaves the prefetch buffer off (FLASH_ACR `0x605`). This
-module writes `0x705` at boot (one immediate at 0x0802153a) and applies `pfch`
-on every audio block, so `pfch 0` restores stock without reflashing.
+module writes `0x705` at boot instead (one immediate at 0x0802153a). Stock
+writes FLASH_ACR only at that one place, so prefetch stays on. There is no setting:
+it has no downside, and installing stock firmware restores the stock value.
 
 **Measured on the module:** prefetch saves about 3–5k cycles per audio block
 under load (10–17% of the 30,006-cycle budget). Without it, high Morph + SRR
-and high-Morph dubbing glitched; with it they didn't. Keep `pfch 1`.
+and high-Morph dubbing glitched; with it they didn't.
 
-## CPU log: `cpul` (default 0)
+## CPU log: `cpul` (default 0, troubleshooting only)
 
 The audio routine already times itself with the DWT cycle counter, but stock
 never starts the counter. This module starts it and collects, per second of
@@ -38,11 +39,11 @@ about 27.5k cycles as the practical ceiling.
 | Hook | Site | Does |
 |---|---|---|
 | PF | 0x0802153a | Boot: FLASH_ACR 0x605 → 0x705 (byte patch) |
-| A1 | 0x08028666 | End of every audio block: `pfch`, counter start, statistics |
+| A1 | 0x08028666 | End of every audio block: counter start, statistics |
 | M1 | 0x08023eec | Idle main loop: append to `cpulog.txt` every 10 s |
 
 **State:** RAM 0x20029000–0x20029FFF (statistics, a 64-second ring, the FIL).
-Settings come from options_keys (`pfch`, `cpul`); without it, prefetch is on
+Settings come from options_keys (`cpul`); without it, prefetch is still on
 and the log off.
 
 ## Verification (emulator)
@@ -50,7 +51,7 @@ and the log off.
 The research repository's emulator test (`verify_patch_cpu_meter.py`, not public):
 - **A1** against an independent model: 21,000 random blocks (ring contents,
   both thresholds, flags and registers), plus counter start, ring-full drops,
-  reset detection, `cpul 0`, `pfch 0/1`, no settings, only bit 8 of FLASH_ACR
+  reset detection, `cpul 0`, no settings, only bit 8 of FLASH_ACR
   touched.
 - **M1** with a mock FatFs: 10 s pacing, header once per session, exact lines,
   open and seek failures retried later, card not mounted; registers and stack

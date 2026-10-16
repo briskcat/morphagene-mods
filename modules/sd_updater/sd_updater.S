@@ -70,7 +70,7 @@
 upd_hook:
     push    {r0-r12, lr}
     ldr     r0, =SETTINGS               @ settings defaults for this boot: tape 1,
-    ldr     r1, =SETTINGS_MAGIC         @ octl 1, fxsl 1, pfch 1, cpul 0, mcap 3, sldm 0,
+    ldr     r1, =SETTINGS_MAGIC         @ octl 1, fxsl 1, (+7 unused), cpul 0, mcap 3, sldm 0,
     str     r1, [r0]                    @ root 50, tlen 8, ingn 0 (options.txt may override)
     ldr     r1, =0x01010101
     str     r1, [r0, #4]

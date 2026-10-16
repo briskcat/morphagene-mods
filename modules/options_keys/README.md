@@ -5,7 +5,7 @@ take effect.
 
 ## What it does
 
-Adds `tape`, `octl`, `fxsl`, `pfch`, `cpul`, `mcap`, `sldm`, `root` and
+Adds `tape`, `octl`, `fxsl`, `cpul`, `mcap`, `sldm`, `root` and
 `tlen` and `ingn` to `options.txt` (see [docs/OPTIONS.md](../../docs/OPTIONS.md)).
 
 - **Parser hook** (0x08023326): checks our keys before the stock key dispatch.
@@ -17,7 +17,7 @@ Adds `tape`, `octl`, `fxsl`, `pfch`, `cpul`, `mcap`, `sldm`, `root` and
   - a comment line for SHIFT + Slide.
 
 **Settings block** (0x2002A0F0): "OPTS" magic, then +4 `tape`, +5 `octl`,
-+6 `fxsl`, +7 `pfch`, +8 `cpul`, +9 `mcap`, +10 `sldm`, +11 `root`, +12
++6 `fxsl`, +7 unused, +8 `cpul`, +9 `mcap`, +10 `sldm`, +11 `root`, +12
 `tlen`, +13 `ingn`, +14 applied this boot, +15 pending gain + 1. sd_updater
 writes the defaults every boot.
 
