@@ -51,7 +51,7 @@ the same way. The mods never touch the bootloader.
 | Exact octave lock | SHIFT + Varispeed | tried on hardware |
 | Random Gene start positions (jitter) | SHIFT + Slide | tried on hardware |
 | Turing mode | `sldm 1`, then SHIFT + Organize / Gene Size / Slide | tried on hardware |
-| Input gain remembered | automatic (REC held + SHIFT taps, as stock) | emulator only, not yet tried on hardware |
+| Input gain remembered | automatic (REC held + SHIFT taps, as stock) | tried on hardware |
 | SD-card updates | `mgmod.bin` on the card | tried on hardware |
 | Faster flash access (more CPU headroom) | always on | tried on hardware |
 | CPU log for troubleshooting | `cpul 1` | tried on hardware |

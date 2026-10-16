@@ -97,6 +97,21 @@ power-up. It never saves while recording; it waits until you stop.
 You can also set it directly with `ingn` in `options.txt` (0–3; 0 is the
 stock starting level).
 
+## Working in the background
+
+These need nothing from you:
+
+- **SD-card updates.** Later updates install from `mgmod.bin` on the card in a
+  few seconds, with no audio cable ([INSTALLING.md](INSTALLING.md#3-later-updates-sd-card)).
+- **Overdub stays in its splice.** A fix: with playback stopped and another
+  splice selected, stock could start an overdub outside the selected splice.
+  Now it stays inside it.
+- **Faster flash access.** The firmware runs with the processor's flash
+  prefetch on, which gives the CPU 10–17% more headroom per audio block, so
+  high-Morph patches glitch less.
+- **CPU log (troubleshooting only).** Off by default; see
+  [OPTIONS.md](OPTIONS.md#troubleshooting-the-cpu-log-cpul).
+
 ## If something seems off
 
 - **A SHIFT tap doesn't change splice:** a knob (or CV on it) moved while SHIFT

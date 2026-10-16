@@ -1,6 +1,6 @@
 # options_keys
 
-**Status:** on hardware (`ingn`: emulator only, not yet on hardware). The mod section appears in `options.txt` and the keys
+**Status:** on hardware (including the `ingn` save). The mod section appears in `options.txt` and the keys
 take effect.
 
 ## What it does
