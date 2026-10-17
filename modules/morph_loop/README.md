@@ -1,7 +1,7 @@
 # morph_loop
 
-**Status:** untested. Built from the recovered tables only; not yet run in the
-emulator or on a module.
+**Status:** untested. Checked against the firmware's tables and the research
+scheduler model; not yet run in the emulator or on a module.
 
 **What it changes.** Stock Morph picks one of 22 presets
 (`min(int(morph × 33.99), 21)`). Each one sets a *length fraction*: the next
@@ -28,7 +28,7 @@ preset 3's short 250-sample (about 5 ms) crossfade, in both `gnsm` modes.
 |---|---|---|---|
 | 0x08047630 | length fraction, 0 | 2.0 | 1.0 |
 | 0x08047634 | length fraction, 1 | 1.5 | 1.0 |
-| 0x08047638 | length fraction, 2 | 4/3 | 1.0 |
+| 0x08047638 | length fraction, 2 | 1.333333 | 1.0 |
 | 0x08047744 | scheduling divisor, 1 | 2 | 1 |
 | 0x08047748 | scheduling divisor, 2 | 3 | 1 |
 
@@ -41,6 +41,16 @@ It's in its own remix, *Full + Morph loop*; pick *Full* for stock Morph.
   so the bottom of the knob may not be identical to 8 o'clock in every mode.
 - What the scheduling divisor changes with a clock patched in isn't traced.
   Clocked behaviour at the bottom of the knob now matches preset 3's.
+
+**Verification:**
+- The stock bytes at all five addresses were read from a fingerprinted mg204
+  image; preset 3 holds 1.0 and divisor 1 as expected.
+- *Full + Morph loop* is *Full* (reproduced bit for bit from `web/remixes.js`)
+  with only these five edits; its sha256 is recorded in the remix.
+- The research repository's scheduler model, fed the patched image, gives
+  identical Gene births at Morph 0, 0.03 and 0.07 to stock at 0.10 (every
+  4,800 samples for a 4,800-sample Gene, fade 250). Stock at Morph 0 waits
+  9,600.
 
 **Try it.** Record a loop, Gene Size fully down (whole splice), Morph fully
 down. It should loop with no gap, as stock does at 8 o'clock.
