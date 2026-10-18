@@ -7,7 +7,7 @@ from mgmod.module import Module
 MODULE = Module(
     name='mono_in',
     title='Mono input: L copied onto R, always or while R is quiet (mono)',
-    status='on hardware (mono 1)',
+    status='on hardware',
     source='mono_in.S', entry='mono_block',
     requires=['options_keys'],
     hooks=[

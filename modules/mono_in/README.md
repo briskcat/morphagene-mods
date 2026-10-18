@@ -1,6 +1,6 @@
 # mono_in
 
-**Status:** `mono 1` works on hardware. `mono 2` (auto) is emulated, not yet tried on hardware.
+**Status:** on hardware (2026-10-18): `mono 1` and `mono 2` (auto) both work. Auto went mono with R unplugged and stayed stereo with a stereo source.
 
 **What it does.** A mono signal into L is heard and recorded on both
 channels, the way Beads, Clouds and Mimeophon treat a mono input.
