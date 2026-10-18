@@ -16,7 +16,7 @@ back near where it was (pickup). That way the sound doesn't jump when you let go
 | SHIFT + Slide | Random Gene start positions (jitter) | always on |
 | SHIFT + Organize / Gene Size / Slide | Turing mode controls | `sldm 1` |
 | REC held + SHIFT taps | Input gain (stock), now remembered | `ingn` |
-| (no gesture) | Mono input: L on both channels | `mono 1` |
+| (no gesture) | Mono input: L on both channels | `mono 2` (auto) or `mono 1` |
 
 Settings are in `options.txt`; see [OPTIONS.md](OPTIONS.md).
 
@@ -120,11 +120,15 @@ stock starting level).
 
 ## Mono input (`mono 1`)
 
-With `mono 1`, the left input is copied onto the right. A mono source patched
-into L is heard on both outputs and recorded on both channels, as on Beads,
-Clouds or Mimeophon. R in is ignored while it's on. The Morphagene can't
-detect whether R is patched, so this is a setting rather than automatic.
-Set `mono 0` (the default) for stereo.
+With `mono 2` (auto), a mono source patched into L only is heard on both
+outputs and recorded on both channels, as on Beads, Clouds or Mimeophon. A
+stereo source into both inputs stays stereo. The Morphagene can't detect
+whether R is patched, so auto listens instead: once R in has been silent for
+half a second, L is faded onto R; as soon as anything plays into R, it fades
+back to stereo within a few milliseconds.
+
+`mono 1` copies L onto R all the time and ignores R in. `mono 0` (the
+default) is stereo, as stock.
 
 ## Working in the background
 

@@ -26,7 +26,7 @@ there.
 | `tlen` | 1–16 | 8 | Turing mode loop length, in steps |
 | `root` | 0–100 | 50 | Turing mode: chance in % that a step plays the root pitch instead of a chord ratio. `root 100` = no pitch changes |
 | `ingn` | 0–3 | 0 | Input gain (REC held + SHIFT taps). Saved automatically about 3 s after you change it on the module; 0 = stock starting level |
-| `mono` | 0, 1, 2 | 0 | Mono input: **1** copies the left input onto the right, so a mono source in L is heard and recorded on both channels (R in is ignored); **0** stereo, as stock; **2** diagnostic, copies the right onto the left (see [mono_in](../modules/mono_in/README.md)) |
+| `mono` | 0, 1, 2 | 0 | Mono input: **2** auto, copies the left input onto the right only while nothing is playing into R in, so a mono source in L is heard and recorded on both channels and a stereo source stays stereo; **1** always copies L onto R (R in is ignored); **0** stereo, as stock ([details](../modules/mono_in/README.md)) |
 
 Values out of range are ignored, and the default is used. SHIFT + Slide
 (jitter) has no setting: it's off until you turn it up.
@@ -46,7 +46,7 @@ sldm 0 //Turing mode: 0 off, 1 on: ...
 root 50 //Turing: chance in percent that a step plays the root rather than a chord ratio (mcr1-mcr3)
 tlen 8 //Turing loop length in steps, 1-16
 ingn 0 //Input gain 0-3 (REC held + SHIFT taps); saved automatically a few seconds after a change
-mono 0 //Mono input: 0 off (stereo), 1 left input copied to the right (heard and recorded on both channels; R in is ignored), 2 diagnostic: right copied to the left
+mono 0 //Mono input: 0 off (stereo), 1 left input copied to the right (heard and recorded on both channels; R in is ignored), 2 auto: only while nothing is playing into R in
 ```
 
 ## Troubleshooting: the CPU log (`cpul`)
