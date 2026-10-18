@@ -16,8 +16,8 @@
 @   tlen 1-16  Turing loop length in steps (default 8)
 @   ingn 0-3   input gain (REC held + SHIFT taps), saved across power cycles
 @              (default 0 = stock)
-@   mono 0|1   mono input: 1 copies the left input onto the right (default 0;
-@              modules/mono_in)
+@   mono 0-2   mono input: 1 copies the left input onto the right, 2 the right
+@              onto the left (diagnostic: channel order) (default 0; modules/mono_in)
 @ Parser hook: the stock loop reads each line into fp and dispatches on the
 @ key at 0x08023326; ours is checked first. Writer hook: the firmware recreates
 @ options.txt (stock keys + comments) after parsing; we append our keys before
@@ -133,8 +133,9 @@ opt_parse:
     b       9f
 7:  adds    r2, r2, #8                  @ cpul -> +8
     b       3f
-6:  adds    r2, r2, #7                  @ mono -> +7
-    b       3f
+6:  adds    r2, r2, #7                  @ mono -> +7, digits 0-2
+    movs    r3, #2
+    b       9f
 17: adds    r2, r2, #13                 @ ingn -> +13, digits 0-3
     movs    r3, #3
     b       9f
@@ -458,5 +459,5 @@ fmt_tlen: .asciz "tlen %d //Turing loop length in steps, 1-16\n"
     .align 2
 fmt_ingn: .asciz "ingn %d //Input gain 0-3 (REC held + SHIFT taps); saved automatically a few seconds after a change\n"
     .align 2
-fmt_mono: .asciz "mono %d //Mono input: 0 off (stereo), 1 left input copied to the right (heard and recorded on both channels; R in is ignored)\n"
+fmt_mono: .asciz "mono %d //Mono input: 0 off (stereo), 1 left input copied to the right (heard and recorded on both channels; R in is ignored), 2 diagnostic: right copied to the left\n"
     .ltorg

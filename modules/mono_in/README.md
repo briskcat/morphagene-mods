@@ -1,11 +1,23 @@
 # mono_in
 
-**Status:** emulated. Not yet tried on hardware.
+**Status:** emulated. On hardware, `mono 1` didn't work yet (see below).
 
 **What it does.** With `mono 1` in `options.txt`, the left input is copied
 onto the right, so a mono signal into L is heard and recorded on both
 channels. This is how Beads, Clouds and Mimeophon treat a mono input. With
 `mono 1` the R input is ignored. `mono 0` (the default) is stock stereo.
+
+**Hardware report (2026-10-18):** `mono 1` made no audible difference on the
+module. Under test: the board may deliver the L jack in the second slot of
+each I2S frame. **`mono 2`** (diagnostic) copies the second slot onto the
+first. Check `options.txt` after a power cycle first: the line should read
+`mono 1 //Mono input: ...` (no line at all means the new image isn't
+installed). Then, with a mono source in L only:
+- `mono 1` makes both outputs go silent, and `mono 2` puts the source on
+  both: the slots are swapped (L arrives second), so `mono 1` must copy the
+  other way.
+- Neither changes anything: the hook isn't reached on hardware (next step: an
+  LED marker in the hook).
 
 **Why a setting, not automatic.** Those modules normal L to R when nothing is
 plugged into R. The Morphagene firmware has no way to tell: no code reads a
@@ -38,6 +50,8 @@ read. Without the settings block (no sd_updater), it stays off.
     are **bit-identical** to the old build fed the L signal on both channels.
   - With `mono 0`: bit-identical to the old build with the same stereo input.
   - Play off, S.O.S. 0 (dry only): every output frame has L = R.
+  - `mono 2`, noise in the first slot and the signal in the second:
+    bit-identical to the old build fed the signal on both channels.
 
 **Try it.** Set `mono 1`, patch a mono source into L only, and listen to both
 outputs. Then record and play back: both channels should carry the recording.

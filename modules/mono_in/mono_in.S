@@ -6,6 +6,8 @@
 @ r2 = number of int16 values (16: 8 frames). Dry monitoring and recording
 @ both read the input from this buffer only. With mono 1, each frame's L
 @ sample is copied over its R sample before the block reads them.
+@ mono 2 (diagnostic) copies the other way: slot 1 over slot 0, to test the
+@ board's channel order on hardware.
 @ Hook: replaces the entry push; r4-r7 are reloaded by the stock code before
 @ use, so they are free after the push.
 
@@ -30,8 +32,18 @@ mono_block:
     bne     2f
     ldrb    r5, [r4, #7]
     cmp     r5, #1
+    beq     3f
+    cmp     r5, #2
     bne     2f
-    mov     r4, r0                      @ frame pointer
+    mov     r4, r0                      @ mono 2 (diagnostic): second slot
+    add     r5, r0, r2, lsl #1          @ onto the first, in case the board's
+    b       5f                          @ L jack arrives in slot 1
+4:  ldrh    r6, [r4, #2]
+    strh    r6, [r4], #4
+5:  cmp     r4, r5
+    blo     4b
+    b       2f
+3:  mov     r4, r0                      @ frame pointer
     add     r5, r0, r2, lsl #1          @ end of the half
     b       1f
 0:  ldrh    r6, [r4], #4                @ L
