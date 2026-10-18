@@ -1,7 +1,9 @@
 # morph_loop
 
-**Status:** emulated. The whole audio block was run in the emulator; not yet
-tried on a module.
+**Status:** on hardware. Morph fully down loops with no gap. Turning Morph
+down from higher gives a short pause before the loop settles; *Full* does the
+same coming down to 8 o'clock, so that is stock behaviour (the emulator shows
+no silent frames there, so it lies outside the modelled audio block).
 
 **What it changes.** Stock Morph picks one of 22 presets
 (`min(int(morph × 33.99), 21)`). Each one sets a *length fraction*: the next
@@ -56,6 +58,8 @@ It's in its own remix, *Full + Morph loop*; pick *Full* for stock Morph.
   Morph reading 0 is silent for 49% of frames, at 240 for 33%. *Full + Morph
   loop* at 0 and 240 gives **bit-identical output** to *Full* at 420 (8
   o'clock): a Gene every 3,136 samples, no silent frames.
+- **On hardware:** flashed *Full + Morph loop*; Morph fully down loops
+  seamlessly.
 - Research repository: `verify_patch_morph_loop.py`.
 
 **Try it.** Record a loop, Gene Size fully down (whole splice), Morph fully
