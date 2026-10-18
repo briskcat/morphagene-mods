@@ -59,7 +59,7 @@ the same way. The mods never touch the bootloader.
 | Faster flash access (more CPU headroom) | always on | tried on hardware |
 | CPU log for troubleshooting | `cpul 1` | tried on hardware |
 | Overdub stays inside the selected splice | automatic (a fix) | built into every image; not tested on its own |
-| Morph fully down plays a seamless loop | *Full + Morph loop* build only | untested ([details](modules/morph_loop/README.md)) |
+| Morph fully down plays a seamless loop | *Full + Morph loop* build only | emulated ([details](modules/morph_loop/README.md)) |
 
 Every feature was also checked instruction by instruction in an emulator
 against the stock firmware.

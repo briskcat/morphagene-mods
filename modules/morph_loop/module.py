@@ -8,7 +8,7 @@ from mgmod.module import Module
 MODULE = Module(
     name='morph_loop',
     title='Morph fully down plays a seamless loop (no silence gap)',
-    status='untested',
+    status='emulated',
     patches=[
         (0x08047630, '00000040', '0000803f'),        # length fraction, preset 0: 2.0 -> 1.0
         (0x08047634, '0000c03f', '0000803f'),        # preset 1: 1.5 -> 1.0

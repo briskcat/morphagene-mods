@@ -1,7 +1,7 @@
 # morph_loop
 
-**Status:** untested. Checked against the firmware's tables and the research
-scheduler model; not yet run in the emulator or on a module.
+**Status:** emulated. The whole audio block was run in the emulator; not yet
+tried on a module.
 
 **What it changes.** Stock Morph picks one of 22 presets
 (`min(int(morph × 33.99), 21)`). Each one sets a *length fraction*: the next
@@ -37,8 +37,8 @@ It's in its own remix, *Full + Morph loop*; pick *Full* for stock Morph.
 
 **Not yet confirmed:**
 - Genes born exactly at Morph 0.0882613 (preset 3's lower edge) set a per-Gene
-  flag that Genes from presets 0–2 won't. What that flag changes isn't known,
-  so the bottom of the knob may not be identical to 8 o'clock in every mode.
+  flag. It made no difference in the playback test, but other modes
+  (clocked, recording, reel changes) weren't run.
 - What the scheduling divisor changes with a clock patched in isn't traced.
   Clocked behaviour at the bottom of the knob now matches preset 3's.
 
@@ -47,10 +47,16 @@ It's in its own remix, *Full + Morph loop*; pick *Full* for stock Morph.
   image; preset 3 holds 1.0 and divisor 1 as expected.
 - *Full + Morph loop* is *Full* (reproduced bit for bit from `web/remixes.js`)
   with only these five edits; its sha256 is recorded in the remix.
-- The research repository's scheduler model, fed the patched image, gives
-  identical Gene births at Morph 0, 0.03 and 0.07 to stock at 0.10 (every
-  4,800 samples for a 4,800-sample Gene, fade 250). Stock at Morph 0 waits
-  9,600.
+- **Lookup, emulated:** the original preset lookup (0x0802796a) run for every
+  Morph reading 0–4095. Readings 0–482 now load preset 3's fraction, overlap
+  and divisor (stock: preset 3 is 362–482); 483–4095 and the instruction path
+  match *Full* exactly. Each table is read only there (one literal each).
+- **Playback, emulated:** original init, TIM2 interrupt and audio block, Play
+  held, Gene Size reading 3500 (a 3,136-sample Gene), 1 s each. *Full* at
+  Morph reading 0 is silent for 49% of frames, at 240 for 33%. *Full + Morph
+  loop* at 0 and 240 gives **bit-identical output** to *Full* at 420 (8
+  o'clock): a Gene every 3,136 samples, no silent frames.
+- Research repository: `verify_patch_morph_loop.py`.
 
 **Try it.** Record a loop, Gene Size fully down (whole splice), Morph fully
 down. It should loop with no gap, as stock does at 8 o'clock.
