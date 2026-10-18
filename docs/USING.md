@@ -16,6 +16,7 @@ back near where it was (pickup). That way the sound doesn't jump when you let go
 | SHIFT + Slide | Random Gene start positions (jitter) | always on |
 | SHIFT + Organize / Gene Size / Slide | Turing mode controls | `sldm 1` |
 | REC held + SHIFT taps | Input gain (stock), now remembered | `ingn` |
+| (no gesture) | Mono input: L on both channels | `mono 1` |
 
 Settings are in `options.txt`; see [OPTIONS.md](OPTIONS.md).
 
@@ -116,6 +117,14 @@ power-up. It never saves while recording; it waits until you stop.
 
 You can also set it directly with `ingn` in `options.txt` (0–3; 0 is the
 stock starting level).
+
+## Mono input (`mono 1`)
+
+With `mono 1`, the left input is copied onto the right. A mono source patched
+into L is heard on both outputs and recorded on both channels, as on Beads,
+Clouds or Mimeophon. R in is ignored while it's on. The Morphagene can't
+detect whether R is patched, so this is a setting rather than automatic.
+Set `mono 0` (the default) for stereo.
 
 ## Working in the background
 

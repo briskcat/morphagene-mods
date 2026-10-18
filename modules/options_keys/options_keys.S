@@ -16,12 +16,14 @@
 @   tlen 1-16  Turing loop length in steps (default 8)
 @   ingn 0-3   input gain (REC held + SHIFT taps), saved across power cycles
 @              (default 0 = stock)
+@   mono 0|1   mono input: 1 copies the left input onto the right (default 0;
+@              modules/mono_in)
 @ Parser hook: the stock loop reads each line into fp and dispatches on the
 @ key at 0x08023326; ours is checked first. Writer hook: the firmware recreates
 @ options.txt (stock keys + comments) after parsing; we append our keys before
 @ its final f_close, so they persist and are documented in the file.
 @ Settings block (SETTINGS): +0 magic "OPTS", +4 tape, +5 octl, +6 fxsl,
-@ +7 unused (was pfch), +8 cpul, +9 mcap, +10 sldm, +11 root, +12 tlen, +13 ingn (the
+@ +7 mono, +8 cpul, +9 mcap, +10 sldm, +11 root, +12 tlen, +13 ingn (the
 @ saved gain), +14 applied at boot (0/1), +15 pending gain + 1 (0 = none).
 @ The block is full, so scal lives at SCALE: a u16 mask, bit d = d semitones
 @ (bits 1-11), reset to 0 every boot by sd_updater.
@@ -54,6 +56,7 @@
     .equ KEY_TLEN,       0x6e656c74     @ "tlen"
     .equ KEY_INGN,       0x6e676e69     @ "ingn"
     .equ KEY_SCAL,       0x6c616373     @ "scal"
+    .equ KEY_MONO,       0x6f6e6f6d     @ "mono"
     .equ SCALE,          0x2002A604     @ scal mask (u16)
     .equ GAIN,           0x20001068     @ stock input-gain index 0-3
     .equ SET_GAIN,       0x080257dd     @ stock: codec line-in volume = 0x13 + 4 * gain
@@ -110,6 +113,9 @@ opt_parse:
     ldr     r1, =KEY_SCAL
     cmp     r0, r1
     beq     18f
+    ldr     r1, =KEY_MONO
+    cmp     r0, r1
+    beq     6f
     ldrb.w  ip, [fp, #1]                @ replaced instruction: stock keys
     b.w     PARSE_STOCK
 8:  adds    r2, r2, #9                  @ mcap -> +9, digits 0-9
@@ -126,6 +132,8 @@ opt_parse:
     movs    r3, #2
     b       9f
 7:  adds    r2, r2, #8                  @ cpul -> +8
+    b       3f
+6:  adds    r2, r2, #7                  @ mono -> +7
     b       3f
 17: adds    r2, r2, #13                 @ ingn -> +13, digits 0-3
     movs    r3, #3
@@ -330,6 +338,17 @@ opt_write:
     ldr     r1, =fmt_ingn
     ldr     r3, =F_PRINTF
     blx     r3
+    ldr     r3, =SETTINGS
+    ldr     r2, [r3]
+    ldr     r1, =SETTINGS_MAGIC
+    cmp     r2, r1
+    ite     eq
+    ldrbeq  r2, [r3, #7]
+    movne   r2, #0
+    addw    r0, sp, #1396
+    ldr     r1, =fmt_mono
+    ldr     r3, =F_PRINTF
+    blx     r3
     addw    r0, sp, #1396               @ replaced: f_close(options.txt)
     ldr     r3, =F_CLOSE
     blx     r3
@@ -438,4 +457,6 @@ fmt_root: .asciz "root %d //Turing: chance in percent that a step plays the root
 fmt_tlen: .asciz "tlen %d //Turing loop length in steps, 1-16\n"
     .align 2
 fmt_ingn: .asciz "ingn %d //Input gain 0-3 (REC held + SHIFT taps); saved automatically a few seconds after a change\n"
+    .align 2
+fmt_mono: .asciz "mono %d //Mono input: 0 off (stereo), 1 left input copied to the right (heard and recorded on both channels; R in is ignored)\n"
     .ltorg

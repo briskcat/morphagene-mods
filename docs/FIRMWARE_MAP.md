@@ -94,7 +94,7 @@ shift_gestures zeroes +4..+239 once.
 | +232..+233 | tape_sos | Per-block flags for the per-sample hooks |
 
 **SETTINGS (0x2002A0F0).** "OPTS" magic (set by sd_updater with the defaults
-every boot), then +4 `tape`, +5 `octl`, +6 `fxsl`, +7 unused, +8 `cpul`,
+every boot), then +4 `tape`, +5 `octl`, +6 `fxsl`, +7 `mono`, +8 `cpul`,
 +9 `mcap`, +10 `sldm`, +11 `root`, +12 `tlen`, +13 `ingn` (saved input gain),
 +14 ingn applied this boot, +15 pending gain + 1 (0 = none).
 

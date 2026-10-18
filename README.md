@@ -58,6 +58,7 @@ the same way. The mods never touch the bootloader.
 | SD-card updates | `mgmod.bin` on the card | tried on hardware |
 | Faster flash access (more CPU headroom) | always on | tried on hardware |
 | CPU log for troubleshooting | `cpul 1` | tried on hardware |
+| Mono input: L heard and recorded on both channels | `mono 1` | emulated, not yet on hardware ([details](modules/mono_in/README.md)) |
 | Overdub stays inside the selected splice | automatic (a fix) | built into every image; not tested on its own |
 | Morph fully down plays a seamless loop | *Full + Morph loop* build only | on hardware ([details](modules/morph_loop/README.md)) |
 
